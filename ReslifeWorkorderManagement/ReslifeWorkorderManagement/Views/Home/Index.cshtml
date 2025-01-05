@@ -1,8 +1,117 @@
-﻿@{
+﻿@model ReslifeWorkorderManagement.Models.HomeVM
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="container centered-container">
+    <button class="home-button black-button custom-button btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleWorkorderForm" aria-expanded="false" aria-controls="collapsibleForm">
+        Submit WorkOrder
+    </button>
+
+    <div class="collapse collapsible-form" id="collapsibleWorkorderForm">
+        <div class="card card-body">
+            <form id="workOrderForm" method="post" action="@Url.Action("WorkorderSubmitted", "WorkOrders")">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="workOrder.RequesterFirstName" class="control-label">First Name</label>
+                    <input asp-for="workOrder.RequesterFirstName" class="form-control" id="firstName" />
+                    <span asp-validation-for="workOrder.RequesterFirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="workOrder.RequesterLastName" class="control-label">Last Name</label>
+                    <input asp-for="workOrder.RequesterLastName" class="form-control" id="lastName" />
+                    <span asp-validation-for="workOrder.RequesterLastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="workOrder.RequesterEmail" class="control-label">Email</label>
+                    <input asp-for="workOrder.RequesterEmail" class="form-control" id="emailAddress"/>
+                    <span asp-validation-for="workOrder.RequesterEmail" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="workOrder.Request" class="control-label"></label>
+                    <input asp-for="workOrder.Request" class="form-control" id="request"/>
+                    <span asp-validation-for="workOrder.Request" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="workOrder.Building" class="control-label"></label>
+                    <select asp-for="workOrder.Building"
+                            class="form-select"
+                            asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Building>()" id="building">
+                        <option value="" selected>-- Choose Building --</option>
+                    </select>
+                    <span asp-validation-for="workOrder.Building" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="workOrder.Area" class="control-label"></label>
+                    <select asp-for="workOrder.Area"
+                            class="form-select"
+                            asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Area>()" id="area">
+                        <option value="" selected>-- Choose Area --</option>
+                    </select>
+                    <span asp-validation-for="workOrder.Area" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="workOrder.Floor" class="control-label"></label>
+                    <input asp-for="workOrder.Floor" class="form-control" id="floor"/>
+                    <span asp-validation-for="workOrder.Floor" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="workOrder.RoomNumber" class="control-label"></label>
+                    <input asp-for="workOrder.RoomNumber" class="form-control" id="roomNumber"/>
+                    <span asp-validation-for="workOrder.RoomNumber" class="text-danger"></span>
+                </div>
+                <div class="m-1"></div>
+                <div>
+                    <button onclick="submitWorkorder()" type="submit" class="btn btn-success" data-save="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="m-2"></div>
+
+    <button class="home-button yellow-button custon-button btn" data-bs-toggle="collapse" data-bs-target="#collapsibleLoginForm" aria-expanded="false" aria-controls="collapsibleForm">
+        Staff Login
+    </button>
+
+    <div class="collapse collapsible-form" id="collapsibleLoginForm">
+        <div class="card card-body">
+            <form method="post" action="@Url.Action("Login", "User")">
+                <div class="mb-3">
+                    <label for="exampleInput" class="form-label">Enter Information</label>
+                    <input type="text" class="form-control" id="exampleInput" name="ExampleInput" placeholder="Enter your data here">
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
 </div>
+
+<script>
+    function submitWorkorder(button) {
+        // Find the parent form of the button
+        var form = $('#workOrderForm');
+        var actionUrl = form.attr('action');
+        console.log('URL:', actionUrl);
+
+        // Serialize the form data
+        var sendData = form.serialize();
+        console.log('sendData:', sendData);
+
+        // Post the serialized data to the action URL
+        $.post(actionUrl, sendData)
+            .done(function (response) {
+                console.log(response.message);
+                if (response.success) {
+                    alert(response.message);
+                    location.reload(); // Reload the page
+                }
+                else {
+                    alert(response.message);
+                    location.reload();
+                }
+            })
+    }
+</script>

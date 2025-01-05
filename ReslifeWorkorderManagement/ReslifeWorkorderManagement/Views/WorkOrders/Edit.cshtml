@@ -1,0 +1,84 @@
+﻿@model ReslifeWorkorderManagement.Models.WorkOrder
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>WorkOrder</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="RequesterFirstName" class="control-label"></label>
+                <input asp-for="RequesterFirstName" class="form-control" />
+                <span asp-validation-for="RequesterFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequesterLastName" class="control-label"></label>
+                <input asp-for="RequesterLastName" class="form-control" />
+                <span asp-validation-for="RequesterLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequesterEmail" class="control-label"></label>
+                <input asp-for="RequesterEmail" class="form-control" />
+                <span asp-validation-for="RequesterEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Request" class="control-label"></label>
+                <input asp-for="Request" class="form-control" />
+                <span asp-validation-for="Request" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Building" class="control-label"></label>
+                <select asp-for="Building" class="form-control"></select>
+                <span asp-validation-for="Building" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Area" class="control-label"></label>
+                <select asp-for="Area" class="form-control"></select>
+                <span asp-validation-for="Area" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Floor" class="control-label"></label>
+                <input asp-for="Floor" class="form-control" />
+                <span asp-validation-for="Floor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomNumber" class="control-label"></label>
+                <input asp-for="RoomNumber" class="form-control" />
+                <span asp-validation-for="RoomNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Progress" class="control-label"></label>
+                <select asp-for="Progress" class="form-control"></select>
+                <span asp-validation-for="Progress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Note" class="control-label"></label>
+                <input asp-for="Note" class="form-control" />
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkOrderAssigneeId" class="control-label"></label>
+                <select asp-for="WorkOrderAssigneeId" class="form-control" asp-items="ViewBag.WorkOrderAssigneeId"></select>
+                <span asp-validation-for="WorkOrderAssigneeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
