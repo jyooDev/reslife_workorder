@@ -15,52 +15,69 @@
             <form id="workOrderForm" method="post" action="@Url.Action("WorkorderSubmitted", "WorkOrders")">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="workOrder.RequesterFirstName" class="control-label">First Name</label>
-                    <input asp-for="workOrder.RequesterFirstName" class="form-control" id="firstName" />
-                    <span asp-validation-for="workOrder.RequesterFirstName" class="text-danger"></span>
+                    <label for="requesterInfo" class="control-label col-form-label-lg">Requester Information</label>
+                    <div id="requesterInfo">
+                        <div class="form-group row">
+                            <label asp-for="workOrder.RequesterFirstName" class="col-sm-2 col-form-label">First Name</label>
+                            <div class="col-sm-10">
+                                <input asp-for="workOrder.RequesterFirstName" class="form-control" id="firstName" placeholder="First Name" />
+                            </div>
+                            <span asp-validation-for="workOrder.RequesterFirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="workOrder.RequesterLastName" class="col-sm-2 col-form-label">Last Name</label>
+                            <div class="col-sm-10">
+                                <input asp-for="workOrder.RequesterLastName" class="form-control" id="lastName" placeholder="Last Name" />
+                            </div>
+                            <span asp-validation-for="workOrder.RequesterLastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="workOrder.RequesterEmail" class="col-sm-2 col-form-label">Email </label>
+                            <div class="col-sm-10">
+                                <input asp-for="workOrder.RequesterEmail" class="form-control" id="emailAddress" placeholder="Email" />
+                            </div>
+                            <span asp-validation-for="workOrder.RequesterEmail" class="text-danger"></span>
+                        </div>
+                    </div>
                 </div>
+                <div class="m-2"></div>
                 <div class="form-group">
-                    <label asp-for="workOrder.RequesterLastName" class="control-label">Last Name</label>
-                    <input asp-for="workOrder.RequesterLastName" class="form-control" id="lastName" />
-                    <span asp-validation-for="workOrder.RequesterLastName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="workOrder.RequesterEmail" class="control-label">Email</label>
-                    <input asp-for="workOrder.RequesterEmail" class="form-control" id="emailAddress"/>
-                    <span asp-validation-for="workOrder.RequesterEmail" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="workOrder.Request" class="control-label"></label>
-                    <input asp-for="workOrder.Request" class="form-control" id="request"/>
-                    <span asp-validation-for="workOrder.Request" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="workOrder.Building" class="control-label"></label>
-                    <select asp-for="workOrder.Building"
-                            class="form-select"
-                            asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Building>()" id="building">
-                        <option value="" selected>-- Choose Building --</option>
-                    </select>
-                    <span asp-validation-for="workOrder.Building" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="workOrder.Area" class="control-label"></label>
-                    <select asp-for="workOrder.Area"
-                            class="form-select"
-                            asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Area>()" id="area">
-                        <option value="" selected>-- Choose Area --</option>
-                    </select>
-                    <span asp-validation-for="workOrder.Area" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="workOrder.Floor" class="control-label"></label>
-                    <input asp-for="workOrder.Floor" class="form-control" id="floor"/>
-                    <span asp-validation-for="workOrder.Floor" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="workOrder.RoomNumber" class="control-label"></label>
-                    <input asp-for="workOrder.RoomNumber" class="form-control" id="roomNumber"/>
-                    <span asp-validation-for="workOrder.RoomNumber" class="text-danger"></span>
+                    <label for="requestInfo" class="control-label col-form-label-lg">Request Details</label>
+                    <div id="requestInfo">
+                        <div class="form-group row">
+                            <label asp-for="workOrder.Building" class="control-label"></label>
+                            <select asp-for="workOrder.Building"
+                                    class="form-select"
+                                    asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Building>()" id="building">
+                                <option value="" selected>-- Choose Building --</option>
+                            </select>
+                            <span asp-validation-for="workOrder.Building" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="workOrder.Area" class="control-label"></label>
+                            <select asp-for="workOrder.Area"
+                                    class="form-select"
+                                    asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Area>()" id="area">
+                                <option value="" selected>-- Choose Area --</option>
+                            </select>
+                            <span asp-validation-for="workOrder.Area" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="workOrder.Floor" class="control-label"></label>
+                            <input asp-for="workOrder.Floor" class="form-control" id="floor" />
+                            <span asp-validation-for="workOrder.Floor" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="workOrder.RoomNumber" class="control-label"></label>
+                            <input asp-for="workOrder.RoomNumber" class="form-control" id="roomNumber" />
+                            <span asp-validation-for="workOrder.RoomNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="workOrder.Request" class="control-label"></label>
+                            <textarea asp-for="workOrder.Request" class="form-control" id="request" rows="3" placeholder="Enter your request here..."></textarea>
+                            <span asp-validation-for="workOrder.Request" class="text-danger"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="m-1"></div>
                 <div>
@@ -91,26 +108,23 @@
 
 <script>
     function submitWorkorder(button) {
-        // Find the parent form of the button
         var form = $('#workOrderForm');
         var actionUrl = form.attr('action');
         console.log('URL:', actionUrl);
 
-        // Serialize the form data
         var sendData = form.serialize();
         console.log('sendData:', sendData);
 
-        // Post the serialized data to the action URL
         $.post(actionUrl, sendData)
             .done(function (response) {
                 console.log(response.message);
                 if (response.success) {
                     alert(response.message);
-                    location.reload(); // Reload the page
+                    location.reload();
                 }
                 else {
                     alert(response.message);
-                    location.reload();
+                    location.reload(); 
                 }
             })
     }
