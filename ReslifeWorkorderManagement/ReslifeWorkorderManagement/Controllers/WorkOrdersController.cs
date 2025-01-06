@@ -64,7 +64,7 @@ namespace ReslifeWorkorderManagement.Controllers
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Workorder is submitted successfully." });
             }
-            return Json(new { success = false, message = "Form is invalid" });
+            return Json(new { success = false, message = "Error: Please enter all required fields." });
         }
 
         // GET: WorkOrders/Edit/5
