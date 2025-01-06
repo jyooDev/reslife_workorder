@@ -141,6 +141,10 @@
             { value: 4, text: "Gender Neutral Bathroom" },
             { value: 5, text: "Other" }
         ];
+
+        firstnameInput.value = "";
+        lastnameInput.value = "";
+        emailInput.value = "";
         buildingDropdown.value = "";
 
         buildingDropdown.addEventListener('change', () => {
@@ -241,14 +245,16 @@
         //firstname
         const validateFirstName = () => {
             const span = document.getElementById('firstname-validation');
-            if (firstnameInput.value === '') {
+            const firstname = firstnameInput.value;
+            console.log(firstname);
+            if (firstname === '') {
                 span.textContent = "Please enter your first name.";
             } else {
                 span.textContent = "";
             }
         };
         firstnameInput.addEventListener('blur', validateFirstName);
-        firstnameInput.addEventListener('change', validateFirstName);
+        firstnameInput.addEventListener('input', validateFirstName);
 
         //lastname
         const validateLastName = () => {
@@ -259,8 +265,8 @@
                 span.textContent = "";
             }
         };
+        lastnameInput.addEventListener('input', validateLastName);
         lastnameInput.addEventListener('blur', validateLastName);
-        lastnameInput.addEventListener('change', validateLastName);
 
         //email
         const validateEmail = () => {
@@ -277,8 +283,8 @@
                 span.textContent = "";
             }
         };
+        emailInput.addEventListener('input', validateEmail);
         emailInput.addEventListener('blur', validateEmail);
-        emailInput.addEventListener('change', validateEmail);
 
         //building 
         const validateBuilding = () => {
@@ -291,8 +297,8 @@
                 span.textContent = "";
             }
         };
+        buildingDropdown.addEventListener('input', validateBuilding);
         buildingDropdown.addEventListener('blur', validateBuilding);
-        buildingDropdown.addEventListener('change', validateBuilding);
 
         //area
         const validateArea = () => {
@@ -305,8 +311,8 @@
                 span.textContent = "";
             }
         };
+        areaDropdown.addEventListener('input', validateArea);
         areaDropdown.addEventListener('blur', validateArea);
-        areaDropdown.addEventListener('change', validateArea);
 
         //floor
         const validateFloor = () => {
@@ -319,9 +325,27 @@
                 span.textContent = "";
             }
         };
+        floorDropdown.addEventListener('input', validateFloor);
         floorDropdown.addEventListener('blur', validateFloor);
-        floorDropdown.addEventListener('change', validateFloor);
 
+        //room
+        const validateRoomNumber = () => {
+            const room = roomNumberInput.value;
+            console.log(room);
+            const span = document.getElementById('room-validation');
+            if(room < 0) {
+                span.textContent = "Room number must be 1 or greater.";
+            }
+            else if (room === ''){
+                roomNumberInput.value = -1;
+                span.textContent = "Room number must be a numeric value.";
+            }
+            else {
+                span.textContent = "";
+            }
+        }
+        roomNumberInput.addEventListener('input', validateRoomNumber);
+        //request
         const validateRequest = () => {
             const request = requestInput.value;
             const span = document.getElementById('request-validation');
@@ -332,13 +356,14 @@
                 span.textContent = "";
             }
         };
+        requestInput.addEventListener('input', validateRequest);
         requestInput.addEventListener('blur', validateRequest);
-        requestInput.addEventListener('change', validateRequest);
 
     })
 
 
 
+    //---submitWorkorder button---
     function submitWorkorder(button) {
         var form = $('#workOrderForm');
         var actionUrl = form.attr('action');
