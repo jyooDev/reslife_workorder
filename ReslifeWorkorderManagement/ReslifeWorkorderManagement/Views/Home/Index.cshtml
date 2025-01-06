@@ -22,21 +22,23 @@
                             <div class="col-sm-10">
                                 <input asp-for="workOrder.RequesterFirstName" class="form-control" id="firstName" placeholder="First Name" />
                             </div>
-                            <span asp-validation-for="workOrder.RequesterFirstName" class="text-danger"></span>
+                            <span id="firstname-validation" class="text-danger"></span>
                         </div>
+                        <div class="m-1"></div>
                         <div class="form-group row">
                             <label asp-for="workOrder.RequesterLastName" class="col-sm-2 col-form-label">Last Name</label>
                             <div class="col-sm-10">
                                 <input asp-for="workOrder.RequesterLastName" class="form-control" id="lastName" placeholder="Last Name" />
                             </div>
-                            <span asp-validation-for="workOrder.RequesterLastName" class="text-danger"></span>
+                            <span id="lastname-validation" class="text-danger"></span>
                         </div>
+                        <div class="m-1"></div>
                         <div class="form-group row">
                             <label asp-for="workOrder.RequesterEmail" class="col-sm-2 col-form-label">Email </label>
                             <div class="col-sm-10">
                                 <input asp-for="workOrder.RequesterEmail" class="form-control" id="emailAddress" placeholder="Email" />
                             </div>
-                            <span asp-validation-for="workOrder.RequesterEmail" class="text-danger"></span>
+                            <span id="email-validation" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -44,44 +46,44 @@
                 <div class="form-group">
                     <label for="requestInfo" class="control-label col-form-label-lg">Request Details</label>
                     <div id="requestInfo">
-                        <div class="form-group row">
+                        <div class="form-group row" style="display: block;">
                             <label asp-for="workOrder.Building" class="control-label"></label>
                             <select asp-for="workOrder.Building"
                                     class="form-select"
                                     asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Building>()" id="building">
                                 <option value="" selected>-- Choose Building --</option>
                             </select>
-                            <span asp-validation-for="workOrder.Building" class="text-danger"></span>
+                            <span id="building-validation"class="text-danger"></span>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" style="display: none;" id="floor-container">
+                            <label asp-for="workOrder.Floor" class="control-label"></label>
+                            <select asp-for="workOrder.Floor" class="form-select" id="floor">
+                                <option value="" selected>-- Choose Floor --</option>
+                            </select>
+                            <span id="floor-validation" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row" style="display: none;" id="area-container">
                             <label asp-for="workOrder.Area" class="control-label"></label>
-                            <select asp-for="workOrder.Area"
-                                    class="form-select"
-                                    asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Area>()" id="area">
+                            <select asp-for="workOrder.Area" class="form-select"id="area">
                                 <option value="" selected>-- Choose Area --</option>
                             </select>
-                            <span asp-validation-for="workOrder.Area" class="text-danger"></span>
+                            <span id="area-validation" class="text-danger"></span>
                         </div>
-                        <div class="form-group row">
-                            <label asp-for="workOrder.Floor" class="control-label"></label>
-                            <input asp-for="workOrder.Floor" class="form-control" id="floor" />
-                            <span asp-validation-for="workOrder.Floor" class="text-danger"></span>
-                        </div>
-                        <div class="form-group row">
+                        <div class="form-group row" style="display: none;" id="room-container">
                             <label asp-for="workOrder.RoomNumber" class="control-label"></label>
                             <input asp-for="workOrder.RoomNumber" class="form-control" id="roomNumber" />
-                            <span asp-validation-for="workOrder.RoomNumber" class="text-danger"></span>
+                            <span id="room-validation" class="text-danger"></span>
                         </div>
-                        <div class="form-group row">
+                        <div class="m-1"></div>
+                        <div class="form-group row" style="display: block;" id="request-container">
                             <label asp-for="workOrder.Request" class="control-label"></label>
                             <textarea asp-for="workOrder.Request" class="form-control" id="request" rows="3" placeholder="Enter your request here..."></textarea>
-                            <span asp-validation-for="workOrder.Request" class="text-danger"></span>
+                            <span id="request-validation" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
-                <div class="m-1"></div>
                 <div>
-                    <button onclick="submitWorkorder()" type="submit" class="btn btn-success" data-save="submit">Submit</button>
+                    <button type="button" onclick="submitWorkorder()" class="btn btn-success">Submit</button>
                 </div>
             </form>
         </div>
@@ -107,6 +109,236 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById('workOrderForm');
+        const firstnameInput = document.getElementById('firstName');
+        const lastnameInput = document.getElementById('lastName');
+        const emailInput = document.getElementById('emailAddress');
+        const buildingDropdown = document.getElementById('building');
+        const areaDropdown = document.getElementById('area');
+        const areaContainer = document.getElementById('area-container');
+        const floorDropdown = document.getElementById('floor');
+        const floorContainer = document.getElementById('floor-container');
+        const roomNumberInput = document.getElementById('roomNumber');
+        const roomContainer = document.getElementById('room-container');
+        const requestInput = document.getElementById('request');
+        const requestContainer = document.getElementById('request-container');
+
+
+        const floorOptions = [
+            { value: 0, text: "B1" },
+            { value: 1, text: "1" },
+            { value: 2, text: "2" },
+            { value: 3, text: "3" },
+            { value: 4, text: "4" },
+        ];
+
+        const areaOptions = [
+            { value: 0, text: "Kitchen" },
+            { value: 1, text: "Room" },
+            { value: 2, text: "Female Bathroom" },
+            { value: 3, text: "Male Bathroom" },
+            { value: 4, text: "Gender Neutral Bathroom" },
+            { value: 5, text: "Other" }
+        ];
+        buildingDropdown.value = "";
+
+        buildingDropdown.addEventListener('change', () => {
+            const building = buildingDropdown.value;
+            console.log("building: ", building);
+            floorDropdown.innerHTML = '<option value="" selected>-- Choose Floor --</option>';
+
+            var filteredOptions = floorOptions;
+
+            if (building === "5" || building === "7") {
+                filteredOptions = floorOptions.filter(option => option.value !== 4);
+            }
+            else if (building === "6") {
+                filteredOptions = floorOptions.filter(option => option.value !== 3 && option.value !== 4);
+            }
+
+            console.log("floor options: ", filteredOptions);
+
+
+            filteredOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option.value;
+                opt.textContent = option.text;
+                floorDropdown.appendChild(opt);
+            });
+
+
+            areaContainer.style.display = 'none';
+            areaDropdown.value = '';
+            roomContainer.style.display = 'none';
+            roomNumberInput.value = '';
+            if (building) {
+                floorContainer.style.display = 'block';
+            } else {
+                floorContainer.style.display = 'none';
+                floorDropdown.value = '';
+            }
+        });
+
+        floorDropdown.addEventListener('change', () => {
+            const floor = floorDropdown.value;
+            const building = buildingDropdown.value;
+
+
+            areaDropdown.innerHTML = '<option value="" selected>-- Choose Area --</option>';
+
+            var filteredOptions = areaOptions;
+
+
+            if ((building === "6" || building === "7") || ((building === "2" || building === "3" || building === "4" || building === "5") && floor !== "0")) // Filter out Kitchen if Building is YU or Swenson
+            {
+                filteredOptions = areaOptions.filter(option => option.value !== 0)
+            }
+
+            if (building === "4") // Filter out Bathroomtypes if Building is Ostrander
+            {
+                filteredOptions = filteredOptions.filter(option => option.value !== 4)
+                if (floor === "1" || floor === "4") {
+                    filteredOptions = filteredOptions.filter(option => option.value !== 2);
+                }
+                else if (floor === "2" || floor === "3") {
+                    filteredOptions = filteredOptions.filter(option => option.value !== 3);
+                }
+            }
+            console.log(filteredOptions);
+
+            filteredOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option.value;
+                opt.textContent = option.text;
+                areaDropdown.appendChild(opt);
+            });
+
+            roomContainer.style.display = 'none';
+            roomNumberInput.value = '';
+            if (floor) {
+                areaContainer.style.display = 'block';
+            } else {
+                areaContainer.style.display = 'none';
+                areaDropdown.value = '';
+            }
+        });
+
+        areaDropdown.addEventListener('change', () => {
+            const area = areaDropdown.value;
+            console.log(area);
+            if (area == 1) {
+                roomContainer.style.display = 'block';
+            } else {
+                roomContainer.style.display = 'none';
+                roomNumberInput.value = '';
+            }
+        });
+
+
+        //--------Fields validation-------------
+        
+        //firstname
+        const validateFirstName = () => {
+            const span = document.getElementById('firstname-validation');
+            if (firstnameInput.value === '') {
+                span.textContent = "Please enter your first name.";
+            } else {
+                span.textContent = "";
+            }
+        };
+        firstnameInput.addEventListener('blur', validateFirstName);
+        firstnameInput.addEventListener('change', validateFirstName);
+
+        //lastname
+        const validateLastName = () => {
+            const span = document.getElementById('lastname-validation');
+            if (lastnameInput.value === '') {
+                span.textContent = "Please enter your last name.";
+            } else {
+                span.textContent = "";
+            }
+        };
+        lastnameInput.addEventListener('blur', validateLastName);
+        lastnameInput.addEventListener('change', validateLastName);
+
+        //email
+        const validateEmail = () => {
+            const span = document.getElementById('email-validation');
+            const email = emailInput.value;
+
+            const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+            if (email === '') {
+                span.textContent = "Please enter your email address.";
+            } else if (!emailRegex.test(email)) {
+                span.textContent = "Please enter a valid email address.";
+            } else {
+                span.textContent = "";
+            }
+        };
+        emailInput.addEventListener('blur', validateEmail);
+        emailInput.addEventListener('change', validateEmail);
+
+        //building 
+        const validateBuilding = () => {
+            const building = buildingDropdown.value;
+            const span = document.getElementById('building-validation');
+            if (building === '') {
+                span.textContent = "Please select a building.";
+            }
+            else {
+                span.textContent = "";
+            }
+        };
+        buildingDropdown.addEventListener('blur', validateBuilding);
+        buildingDropdown.addEventListener('change', validateBuilding);
+
+        //area
+        const validateArea = () => {
+            const area = areaDropdown.value;
+            const span = document.getElementById('area-validation');
+            if (area === '' ){
+                span.textContent = "Please select area.";
+            }
+            else {
+                span.textContent = "";
+            }
+        };
+        areaDropdown.addEventListener('blur', validateArea);
+        areaDropdown.addEventListener('change', validateArea);
+
+        //floor
+        const validateFloor = () => {
+            const floor = floorDropdown.value;
+            const span = document.getElementById('floor-validation');
+            if (floor === '') {
+                span.textContent = "Please select floor.";
+            }
+            else {
+                span.textContent = "";
+            }
+        };
+        floorDropdown.addEventListener('blur', validateFloor);
+        floorDropdown.addEventListener('change', validateFloor);
+
+        const validateRequest = () => {
+            const request = requestInput.value;
+            const span = document.getElementById('request-validation');
+            if (request === '') {
+                span.textContent = "Please enter your request.";
+            }
+            else {
+                span.textContent = "";
+            }
+        };
+        requestInput.addEventListener('blur', validateRequest);
+        requestInput.addEventListener('change', validateRequest);
+
+    })
+
+
+
     function submitWorkorder(button) {
         var form = $('#workOrderForm');
         var actionUrl = form.attr('action');
@@ -124,7 +356,6 @@
                 }
                 else {
                     alert(response.message);
-                    location.reload(); 
                 }
             })
     }
