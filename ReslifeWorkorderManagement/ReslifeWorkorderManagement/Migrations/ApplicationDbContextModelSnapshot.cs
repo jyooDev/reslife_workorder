@@ -282,7 +282,7 @@ namespace ReslifeWorkorderManagement.Migrations
 
                     b.HasIndex("WorkOrderAssigneeId");
 
-                    b.ToTable("WorkOrder");
+                    b.ToTable("WorkOrder", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

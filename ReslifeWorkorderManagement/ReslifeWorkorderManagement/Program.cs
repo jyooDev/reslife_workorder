@@ -26,7 +26,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     // Password settings. 
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
@@ -93,5 +93,60 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
+
+// For Development Env, start the app with an admin account
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    string email = "testadmin@admin.com";
+    string username = "testadmin";
+    string password = "Testadmin123";
+    string firstName = "Admin";
+    string lastName = "Lee";
+
+    // Ensure the role "Administrator" exists
+    if (!await roleManager.RoleExistsAsync("Administrator"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Administrator"));
+    }
+
+    // Check if the user already exists
+    if (await userManager.FindByNameAsync(username) == null)
+    {
+        var user = new ApplicationUser()
+        {
+            UserName = username,
+            Email = email,
+            FirstName = firstName,
+            LastName = lastName,
+            EmailConfirmed = true,
+        };
+
+        var result = await userManager.CreateAsync(user, password);
+
+        if (result.Succeeded)
+        {
+            // Add the user to the "Administrator" role
+            await userManager.AddToRoleAsync(user, "Administrator");
+            Console.WriteLine($"User '{username}' created and added to role 'Administrator'.");
+        }
+        else
+        {
+            // Log errors
+            foreach (var error in result.Errors)
+            {
+                Console.WriteLine($"Error: {error.Description}");
+            }
+        }
+    }
+    else
+    {
+        Console.WriteLine($"User '{username}' already exists.");
+    }
+}
+
 
 app.Run();
