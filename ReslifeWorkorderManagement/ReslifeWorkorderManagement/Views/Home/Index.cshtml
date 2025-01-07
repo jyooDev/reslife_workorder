@@ -1,4 +1,4 @@
-﻿@model ReslifeWorkorderManagement.Models.HomeVM
+﻿@model ReslifeWorkorderManagement.Models.WorkOrder
 
 @{
     ViewData["Title"] = "Home Page";
@@ -18,25 +18,25 @@
                     <label for="requesterInfo" class="control-label col-form-label-lg">Requester Information</label>
                     <div id="requesterInfo">
                         <div class="form-group row">
-                            <label asp-for="workOrder.RequesterFirstName" class="col-sm-2 col-form-label">First Name</label>
+                            <label asp-for="RequesterFirstName" class="col-sm-2 col-form-label">First Name</label>
                             <div class="col-sm-10">
-                                <input asp-for="workOrder.RequesterFirstName" class="form-control" id="firstName" placeholder="First Name" />
+                                <input asp-for="RequesterFirstName" class="form-control" id="firstName" placeholder="First Name" />
                             </div>
                             <span id="firstname-validation" class="text-danger"></span>
                         </div>
                         <div class="m-1"></div>
                         <div class="form-group row">
-                            <label asp-for="workOrder.RequesterLastName" class="col-sm-2 col-form-label">Last Name</label>
+                            <label asp-for="RequesterLastName" class="col-sm-2 col-form-label">Last Name</label>
                             <div class="col-sm-10">
-                                <input asp-for="workOrder.RequesterLastName" class="form-control" id="lastName" placeholder="Last Name" />
+                                <input asp-for="RequesterLastName" class="form-control" id="lastName" placeholder="Last Name" />
                             </div>
                             <span id="lastname-validation" class="text-danger"></span>
                         </div>
                         <div class="m-1"></div>
                         <div class="form-group row">
-                            <label asp-for="workOrder.RequesterEmail" class="col-sm-2 col-form-label">Email </label>
+                            <label asp-for="RequesterEmail" class="col-sm-2 col-form-label">Email </label>
                             <div class="col-sm-10">
-                                <input asp-for="workOrder.RequesterEmail" class="form-control" id="emailAddress" placeholder="Email" />
+                                <input asp-for="RequesterEmail" class="form-control" id="emailAddress" placeholder="Email" />
                             </div>
                             <span id="email-validation" class="text-danger"></span>
                         </div>
@@ -47,8 +47,8 @@
                     <label for="requestInfo" class="control-label col-form-label-lg">Request Details</label>
                     <div id="requestInfo">
                         <div class="form-group row" style="display: block;">
-                            <label asp-for="workOrder.Building" class="control-label"></label>
-                            <select asp-for="workOrder.Building"
+                            <label asp-for="Building" class="control-label"></label>
+                            <select asp-for="Building"
                                     class="form-select"
                                     asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Building>()" id="building">
                                 <option value="" selected>-- Choose Building --</option>
@@ -56,34 +56,34 @@
                             <span id="building-validation"class="text-danger"></span>
                         </div>
                         <div class="form-group row" style="display: none;" id="floor-container">
-                            <label asp-for="workOrder.Floor" class="control-label"></label>
-                            <select asp-for="workOrder.Floor" class="form-select" id="floor">
+                            <label asp-for="Floor" class="control-label"></label>
+                            <select asp-for="Floor" class="form-select" id="floor">
                                 <option value="" selected>-- Choose Floor --</option>
                             </select>
                             <span id="floor-validation" class="text-danger"></span>
                         </div>
                         <div class="form-group row" style="display: none;" id="area-container">
-                            <label asp-for="workOrder.Area" class="control-label"></label>
-                            <select asp-for="workOrder.Area" class="form-select"id="area">
+                            <label asp-for="Area" class="control-label"></label>
+                            <select asp-for="Area" class="form-select"id="area">
                                 <option value="" selected>-- Choose Area --</option>
                             </select>
                             <span id="area-validation" class="text-danger"></span>
                         </div>
                         <div class="form-group row" style="display: none;" id="room-container">
-                            <label asp-for="workOrder.RoomNumber" class="control-label"></label>
-                            <input asp-for="workOrder.RoomNumber" class="form-control" id="roomNumber" />
+                            <label asp-for="RoomNumber" class="control-label"></label>
+                            <input asp-for="RoomNumber" class="form-control" id="roomNumber" />
                             <span id="room-validation" class="text-danger"></span>
                         </div>
                         <div class="m-1"></div>
                         <div class="form-group row" style="display: block;" id="request-container">
-                            <label asp-for="workOrder.Request" class="control-label"></label>
-                            <textarea asp-for="workOrder.Request" class="form-control" id="request" rows="3" placeholder="Enter your request here..."></textarea>
+                            <label asp-for="Request" class="control-label"></label>
+                            <textarea asp-for="Request" class="form-control" id="request" rows="3" placeholder="Enter your request here..."></textarea>
                             <span id="request-validation" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <button type="button" onclick="submitWorkorder()" class="btn btn-success">Submit</button>
+                    <button type="button" onclick="submitWorkorder()" class="btn btn-success w-100 p-2">Submit</button>
                 </div>
             </form>
         </div>
@@ -91,21 +91,10 @@
 
     <div class="m-2"></div>
 
-    <button class="home-button yellow-button custon-button btn" data-bs-toggle="collapse" data-bs-target="#collapsibleLoginForm" aria-expanded="false" aria-controls="collapsibleForm">
+    <a href="@Url.Action("Login", "Users")" class="home-button yellow-button custon-button btn">
         Staff Login
-    </button>
+    </a>
 
-    <div class="collapse collapsible-form" id="collapsibleLoginForm">
-        <div class="card card-body">
-            <form method="post" action="@Url.Action("Login", "User")">
-                <div class="mb-3">
-                    <label for="exampleInput" class="form-label">Enter Information</label>
-                    <input type="text" class="form-control" id="exampleInput" name="ExampleInput" placeholder="Enter your data here">
-                </div>
-                <button type="submit" class="btn btn-success">Submit</button>
-            </form>
-        </div>
-    </div>
 </div>
 
 <script>

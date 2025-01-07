@@ -1,8 +1,23 @@
-﻿@model ReslifeWorkorderManagement.Models.ApplicationUser
+﻿@model ReslifeWorkorderManagement.Models.LoginVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Login";
 }
 
-
-
+<div class="card card-body">
+    <h2 class="text-center login-title">Login</h2>
+    <form method="post" asp-action="Login">
+        <div class="mb-3">
+            <label asp-for="Username" class="form-label">Username</label>
+            <input asp-for="Username" class="form-control" id="username" placeholder="Enter your username">
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Enter your password">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <button type="submit" class="btn btn-light w-100 p-2">Submit</button>
+    </form>
+</div>
