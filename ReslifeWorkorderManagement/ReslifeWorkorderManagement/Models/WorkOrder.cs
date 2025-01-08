@@ -24,7 +24,9 @@ namespace ReslifeWorkorderManagement.Models
         public int? RoomNumber { get; set; }
         public Progress Progress { get; set; }
         public string? Note { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public DateTime? CompletedAt{ get; set; }
         //foreignkey
         public string? WorkOrderAssigneeId { get; set; } //optional forein key property
 

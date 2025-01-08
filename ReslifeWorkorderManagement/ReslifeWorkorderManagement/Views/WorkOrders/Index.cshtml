@@ -1,95 +1,255 @@
 ﻿@model IEnumerable<ReslifeWorkorderManagement.Models.WorkOrder>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "WorkOrders";
+    Layout = "_Staff-Layout";
 }
 
-<h1>Index</h1>
+<div id="PlaceHolderHere"></div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RequesterFirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RequesterLastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RequesterEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Request)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Building)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Area)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Floor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RoomNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Progress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Note)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkOrderAssignee)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequesterFirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequesterLastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequesterEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Request)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Building)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Area)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Floor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoomNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Progress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Note)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkOrderAssignee.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="wrapper">
+    <h1>Work Orders</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Request)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Building)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Area)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Floor)
+                </th>
+                <th>
+                    Room
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Progress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Note)
+                </th>
+                <th>
+                    Assignee
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td data-cell="name">
+                    @Html.DisplayFor(modelItem => item.RequesterFirstName)  @Html.DisplayFor(modelItem => item.RequesterLastName)
+                </td>
+                <td data-cell="request">
+                    @Html.DisplayFor(modelItem => item.Request)
+                </td>
+                <td data-cell="building">
+                    @Html.DisplayFor(modelItem => item.Building)
+                </td>
+                <td data-cell="area">
+                    @Html.DisplayFor(modelItem => item.Area)
+                </td>
+                <td data-cell="floor">
+                    @Html.DisplayFor(modelItem => item.Floor)
+                </td>
+                <td data-cell="room">
+                    @Html.DisplayFor(modelItem => item.RoomNumber)
+                </td>
+                <td data-cell="progress">
+                        @if (item.Progress == Progress.Requested)
+                        {
+                            <div class="badge progress-requested text-uppercase">
+                                @Html.DisplayFor(modelItem => item.Progress)
+                            </div>
+                        }
+                        else if (item.Progress == Progress.InProgress)
+                        {
+                            <div class="badge progress-inprogress text-uppercase">
+                                @Html.DisplayFor(modelItem => item.Progress)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="badge progress-complete text-uppercase">
+                                Complete
+                            </div>
+                        }
+                </td>
+                <td data-cell="note">
+                    @Html.DisplayFor(modelItem => item.Note)
+                </td>
+                <td data-cell="assignee">
+                    @Html.DisplayFor(modelItem => item.WorkOrderAssignee.Id)
+                </td>
+                <td data-cell="action">
+                    <button data-toggle="modal" data-url="@Url.Action("Edit", "WorkOrders", new { id = item.Id })" class="edit-icon-btn">
+                        <i class="bi bi-pencil edit-icon"></i>
+                    </button>
+                    <button data-toggle="modal" data-url="@Url.Action("Details", "WorkOrders", new { id = item.Id })" class="details-icon-btn">
+                            <i class="bi bi-journal-text details-icon"></i>
+                    </button>
+                    <button data-toggle="modal" data-url="@Url.Action("Delete", "WorkOrders", new { id = item.Id })" class="delete-icon-btn">
+                        <i class="bi bi-trash details-icon"></i>
+                    </button>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
+
+<div class="full-width-container mobile-view">
+    @foreach (var item in Model)
+    {
+        <div class="card-container">
+            <div class="bg-light p-4 rounded shadow">
+                <!-- Top Row: Name, Email, Status -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <strong>@Html.DisplayFor(modelItem => item.RequesterFirstName) @Html.DisplayFor(modelItem => item.RequesterLastName)</strong>
+                    </div>
+                    <div>
+                        @Html.DisplayFor(modelItem => item.RequesterEmail)
+                     </div>
+                    @if (item.Progress == Progress.Requested)
+                    {
+                        <div class="badge progress-requested text-uppercase">
+                            @Html.DisplayFor(modelItem => item.Progress)
+                        </div>
+                    }
+                    else if (item.Progress == Progress.InProgress)
+                    {
+                        <div class="badge progress-inprogress text-uppercase">
+                            @Html.DisplayFor(modelItem => item.Progress)
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="badge progress-complete text-uppercase">
+                            Complete
+                        </div>
+                    }
+                </div>
+
+                <!-- Request Content -->
+                <div class="text-secondary mb-2">
+                    Request: @Html.DisplayFor(modelItem => item.Request)
+                </div>
+
+                <!-- Assignee -->
+                <div class="badge assignee-box">
+                    Assigned to @Html.DisplayFor(modelItem => item.WorkOrderAssignee.Id)
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .edit-icon{
+        color:brown;
+    }
+
+    .details-icon{
+        color: black;
+    }
+
+    .delete-icon{
+        color: black;
+    }
+
+    .progress-requested{
+        background-color: rgba(180, 16, 49, 0.33)
+    }
+
+    .progress-inprogress{
+        background-color: rgba(255, 187, 17, 0.33)
+    }
+
+    .progress-complete{
+        background-color: rgba(95, 207, 98, 0.51);
+    }
+
+    .assignee-box{
+        background-color: rgba(116, 116, 116, 0.86);
+    }
+    table{
+        background-color: #f7f7f7;
+        color: black;
+    }
+
+    th,
+    td {
+        padding: 1rem;
+    }
+
+    thead{
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    th{
+        position: sticky;
+        text-align: left;
+    }
+
+    tr:nth-of-type(2n) {
+        background: hsl(0 50% 0% / 0.05);
+    }
+
+
+    /* Mobile View */
+
+    .mobile-view{
+        display: none;
+    }
+
+    @@media (max-width: 768px) {
+        table {
+            display: none;
+        }
+
+        .mobile-view{
+            display: grid;
+        }
+    }
+
+    /* Container spans full width of the viewport */
+    .full-width-container {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    /* Each card container takes full width */
+    .card-container {
+        width: 100%; /* Full width */
+        padding: 0 10px; /* Add padding for spacing between cards and edges */
+        margin-bottom: 15px; /* Space between cards */
+        box-sizing: border-box;
+    }
+
+    /* Card styling */
+    .bg-light {
+        width: 100%; /* Ensure card spans full width */
+        border: 1px solid #ddd;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+    .text-secondary {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+</style>

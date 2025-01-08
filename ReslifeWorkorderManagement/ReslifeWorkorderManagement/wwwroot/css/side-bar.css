@@ -7,12 +7,12 @@
     background: #333;
     color: white;
     width: 25%;
-    height: calc(100% - 7.5rem);
+    height: 100%;
     padding: 0 1rem;
     position: fixed;
-    top: 3.5rem;
     left: 0;
     transition: width .10s ease-in-out;
+    z-index: 1000;
 }
 
 .sidebartop{
@@ -121,13 +121,10 @@
 
 /*main body*/
 main {
-    margin-left: calc(25% + 1rem);
-    transition: margin-left .10s ease-in-out;
+    margin-left: calc(5%);
+    margin-top:1rem;
 }
 
-.short main{
-    margin-left: 1rem;
-}
 .short .sidebar{
     width: 7%;
     text-align: center;
@@ -169,4 +166,8 @@ main {
 
 .short .sidebar .name {
     display: none;
+}
+
+footer{
+    width: 95%;
 }
