@@ -28,6 +28,10 @@ namespace ReslifeWorkorderManagement.Controllers
 
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
             return View();
         }
 
@@ -59,7 +63,7 @@ namespace ReslifeWorkorderManagement.Controllers
                     new Claim("lastname", user.LastName)
                 };
                 await _signInManager.SignInWithClaimsAsync(user, false, claims);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
             return View(model);
         }
