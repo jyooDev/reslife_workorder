@@ -37,8 +37,8 @@ function showHover() {
 function showStoredSidebar() {
     if (localStorage.getItem("keepSidebar") === "true") {
         document.querySelector("body").classList.add("short");
-        showHover();
     }
 }
 
 showStoredSidebar();
+showHover();

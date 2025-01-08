@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using ReslifeWorkorderManagement.Data;
 using ReslifeWorkorderManagement.Models;
+using System.Security.Claims;
 
 namespace ReslifeWorkorderManagement.Controllers
 {
@@ -52,10 +53,12 @@ namespace ReslifeWorkorderManagement.Controllers
                 }
 
                 var user = await _userManager.GetUserAsync(User);
-                if (user == null)
+                var claims = new List<Claim>
                 {
-                    return View(model);
-                }
+                    new Claim("firstname", user.FirstName),
+                    new Claim("lastname", user.LastName)
+                };
+                await _signInManager.SignInWithClaimsAsync(user, false, claims);
                 return RedirectToAction("Index", "Home");
             }
             return View(model);

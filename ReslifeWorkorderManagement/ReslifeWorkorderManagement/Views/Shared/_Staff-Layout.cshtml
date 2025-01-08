@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var firstName = User.Claims.FirstOrDefault(c => c.Type == "firstname").Value;
+    var lastName = User.Claims.LastOrDefault(c => c.Type == "lastname").Value;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -45,8 +50,23 @@
                     <img src="/images/logo.png" alt="" />
                 </div>
                 <div class="name">
-                    <h4>@User.Identity.</h4>
-                    Administrator
+                    <h4>@firstName @lastName</h4>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <span>Administrator</span>
+                    }
+                    else if (User.IsInRole("MaintenanceStaff"))
+                    {
+                        <span>Maintenance Staff</span>
+                    }
+                    else if (User.IsInRole("DeskStaff"))
+                    {
+                        <span>YU Desk Staff</span>
+                    }
+                    else if (User.IsInRole("StudentSupervisor"))
+                    {
+                        <span>Student Supervisor</span>
+                    }
                 </div>
                 <div class="sidebar-logout">
                     <a href="#"><i class="bi bi-box-arrow-left"></i></a>

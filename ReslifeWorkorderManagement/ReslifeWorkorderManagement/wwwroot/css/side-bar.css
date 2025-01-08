@@ -84,7 +84,6 @@
     display: flex;
     justify-content: space-between;
     align-content: center;
-    align-items: center;
     width: calc(100% - 2rem);
     position: absolute;
     bottom: 1rem;
@@ -100,10 +99,12 @@
     width: 50px;
 }
 
-.name{
+.name {
     flex: 1 1 auto;
 }
+
 .name h4{
+    top: 10px;
     padding: 0;
     margin: 0;
 }
