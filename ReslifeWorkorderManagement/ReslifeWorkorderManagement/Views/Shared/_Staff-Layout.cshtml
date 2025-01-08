@@ -1,0 +1,94 @@
+﻿@{
+    var firstName = User.Claims.FirstOrDefault(c => c.Type == "firstname").Value;
+    var lastName = User.Claims.LastOrDefault(c => c.Type == "lastname").Value;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ReslifeWorkorderManagement</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/side-bar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/ReslifeWorkorderManagement.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WorkOrderDemo</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebartop">
+                <div class="logo">
+                    UW SUPERIOR 
+                </div>
+                <div class="menu">
+                    <i class="bi bi-list"></i>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#"><i class="bi bi-clipboard-data-fill"></i><span class="sidebar-text">Dashboard</span></a></li>
+                    <li><a href="#"><i class="bi bi-hammer"></i><span class="sidebar-text">Workorders</span></a></li>
+                    <li><a href="#"><i class="bi bi-people"></i><span class="sidebar-text">Staffs</span></a></li>
+                </ul>
+            </nav>
+            <div class="account">
+                <div class="avatar">
+                    <img src="/images/logo.png" alt="" />
+                </div>
+                <div class="name">
+                    <h4>@firstName @lastName</h4>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <span>Administrator</span>
+                    }
+                    else if (User.IsInRole("MaintenanceStaff"))
+                    {
+                        <span>Maintenance Staff</span>
+                    }
+                    else if (User.IsInRole("DeskStaff"))
+                    {
+                        <span>YU Desk Staff</span>
+                    }
+                    else if (User.IsInRole("StudentSupervisor"))
+                    {
+                        <span>Student Supervisor</span>
+                    }
+                </div>
+                <div class="sidebar-logout">
+                    <a href="#"><i class="bi bi-box-arrow-left"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - ReslifeWorkorderManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/side-bar.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
