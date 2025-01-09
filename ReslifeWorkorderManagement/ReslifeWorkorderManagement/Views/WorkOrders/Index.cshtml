@@ -40,7 +40,7 @@
                 <th>
                     Assignee
                 </th>
-                <th>
+                <th class="action">
                     Action
                 </th>
             </tr>
@@ -146,16 +146,32 @@
 </div>
 
 <style>
-    .edit-icon{
-        color:brown;
+    .edit-icon-btn {
+        border-radius: 10%;
+        margin: 2px;
+        padding: 0.3rem 0.3rem;
+        border: none;
+        box-shadow: none;
+        color: white;
+        background-color: #303030;
     }
 
-    .details-icon{
-        color: black;
+    .details-icon-btn{
+        border-radius: 10%;
+        margin: 2px;
+        padding: 0.3rem 0.3rem;
+        border: none;
+        color: white;
+        background-color: #303030;
     }
 
-    .delete-icon{
-        color: black;
+    .delete-icon-btn{
+        border-radius: 10%;
+        margin: 2px;
+        padding: 0.3rem 0.3rem;
+        border: none;
+        color: white;
+        background-color: #303030;
     }
 
     .progress-dropdown{
@@ -185,6 +201,7 @@
     .assignee-box{
         background-color: rgba(116, 116, 116, 0.86);
     }
+
     table{
         background-color: #f7f7f7;
         color: black;
@@ -193,6 +210,10 @@
     th,
     td {
         padding: 1rem;
+    }
+
+    .action {
+        width: 12%;
     }
 
     thead{
