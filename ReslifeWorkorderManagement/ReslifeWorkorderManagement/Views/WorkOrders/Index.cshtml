@@ -71,7 +71,8 @@
                                 class="badge progress-dropdown"
                                 asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Progress>()"
                                 onchange="updateProgress(this)"
-                                data-url="@Url.Action("UpdateProgress", "WorkOrders", new { id = item.Id })">
+                                data-url="@Url.Action("UpdateProgress", "WorkOrders", new { id = item.Id })"
+                                data-id="@item.Id">
                         </select>
                 </td>
                 <td data-cell="note">
@@ -242,10 +243,10 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", (event) => {
-        styleProgressDropdown();
+        styleAllProgressDropdown();
     });
 
-    function styleProgressDropdown() {
+    function styleAllProgressDropdown() {
         const ProgressDropdown = document.querySelectorAll(".progress-dropdown");
         ProgressDropdown.forEach((element) => {
             const progress = element.value;
@@ -259,6 +260,27 @@
                 element.classList.add("progress-complete");
             }
         });
+    }
+
+    function styleProgressDropdown(id, newProgress) {
+        const element = document.querySelector(`.progress-dropdown[data-id="${id}"]`);
+        console.log(element);
+        if (!element) {
+            console.error(`No dropdown found with data-id="${id}"`);
+            return;
+        }       
+        element.className = "";
+        element.classList.add("badge");
+        element.classList.add("progress-dropdown");
+        if (newProgress == 0) {
+            element.classList.add("progress-requested");
+        }
+        else if (newProgress == 1) {
+            element.classList.add("progress-inprogress");
+        }
+        else {
+            element.classList.add("progress-complete");
+        }
     }
 
     function updateProgress(selectElement) {
@@ -275,7 +297,7 @@
         $.post(url, sendData).done(function (response) {
             console.log('Response Success: ', response.success);
             if (response.success) {
-                styleProgressDropdown();
+                styleProgressDropdown(response.workOrderId, response.progress);
             }
             else {
                 if (!(response.message == undefined)) {

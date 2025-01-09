@@ -176,7 +176,7 @@ namespace ReslifeWorkorderManagement.Controllers
                 }
                 _context.Update(workOrder);
                 await _context.SaveChangesAsync();
-                return Json(new { success = true, message = "Progress updated successfully." });
+                return Json(new { success = true, workOrderId = id, progress = newProgress });
 
             }
             catch (Exception e)
