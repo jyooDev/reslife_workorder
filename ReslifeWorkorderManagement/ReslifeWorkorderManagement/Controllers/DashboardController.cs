@@ -1,12 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ReslifeWorkorderManagement.Data;
 
 namespace ReslifeWorkorderManagement.Controllers
 {
     public class DashboardController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public DashboardController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var applicationDbContext = _context.WorkOrder.Include(w => w.WorkOrderAssignee);
+            var workOrders = await applicationDbContext.ToListAsync();
+            workOrders.Sort((x, y) => DateTime.Compare(x.CreatedAt, y.CreatedAt));
+            workOrders.Reverse();
+            var recentFiveWorkOrders = workOrders.Take(5);
+            return View(recentFiveWorkOrders);
         }
     }
 }

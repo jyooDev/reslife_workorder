@@ -1,6 +1,161 @@
-﻿@{
+﻿@model IEnumerable<ReslifeWorkorderManagement.Models.WorkOrder>
+
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "_Staff-Layout";
 }
 
-<h1>hello</h1>
+<div class="d-flex justify-content-between align-items-center heading-line">
+    <h1>Dashboard</h1>
+</div>
+<div class="insights">
+    <div class="requested">
+        <span><i class="bi bi-clipboard-data-fill"></i></span>
+        <div class="middle">
+            <div class="left">
+                <h6>Total Workorder</h6>
+                <h4>Requested</h4>
+            </div>
+            <div class="right-workorder">
+                <h1>50</h1>
+            </div>
+        </div>
+    </div>
+    <div class="in-progress">
+        <span><i class="bi bi-caret-right-fill"></i></span>
+        <div class="middle">
+            <div class="left">
+                <h6>Total Workorder</h6>
+                <h4>In Progress</h4>
+            </div>
+            <div class="right-workorder">
+                <h1>50</h1>
+            </div>
+        </div>
+    </div>
+    <div class="completed">
+        <span><i class="bi bi-check-lg"></i></span>
+        <div class="middle">
+            <div class="left">
+                <h6>Total Workorder</h6>
+                <h4>Completed</h4>
+            </div>
+            <div class="right-workorder">
+                <h1>50</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---- Recent Workorders ----->
+<div class="recent-workorders">
+    <h2> Recent WorkOrders</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Created At
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Request)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Building)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Progress)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td data-cell="name">
+                        @Html.DisplayFor(modelItem => item.RequesterFirstName)  @Html.DisplayFor(modelItem => item.RequesterLastName)
+                    </td>
+                    <td data-created="@item.CreatedAt">
+                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                    </td>
+                    <td data-cell="request">
+                        @Html.DisplayFor(modelItem => item.Request)
+                    </td>
+                    <td data-cell="building">
+                        @Html.DisplayFor(modelItem => item.Building)
+                    </td>
+                    <td data-cell="progress">
+                        @Html.DisplayFor(modelItem => item.Progress)
+                    </td>              
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<style>
+
+    .insights{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.6rem;
+    }
+
+    .insights > div {
+        background: white;
+        padding: 2rem;
+        border-radius: 5%;
+        margin-top: 1rem;
+        box-shadow: var(--box-shadow);
+    }
+
+    .insights > div:hover{
+        box-shadow: none;
+        transition: all 300ms ease;
+    }
+
+    .insights > div span {
+        background: var(--yellow-primary);
+        padding: 0.5rem;
+        border-radius: 50%;
+        color: black;
+    }
+
+    .insights > div .middle{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .insights .left{
+
+    }
+    .insights .right-workorder{
+        width: 92px;
+        height: 92px;
+        transform: translate(30px, 15px);
+    }
+
+    .insihgts .right-workorder h1{
+        font-size: 30px;
+    }
+
+    .recent-workorders{
+        margin-top: 2rem;
+    }
+
+    .recent-workorders table {
+        background: white;
+        width: 100%;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: var(--box-shadow);
+    }
+
+    .recent-workorders table tbody td{
+        height: 2.8rem;
+        border-bottom: 1px solid #f2f2f2;
+        color: grey;
+    }
+</style>
