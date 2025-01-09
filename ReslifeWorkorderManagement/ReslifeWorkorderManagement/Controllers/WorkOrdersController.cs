@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ReslifeWorkorderManagement.Models;
 
 namespace ReslifeWorkorderManagement.Controllers
 {
+    [Authorize]
     public class WorkOrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -42,7 +44,7 @@ namespace ReslifeWorkorderManagement.Controllers
                 return NotFound();
             }
 
-            return View(workOrder);
+            return PartialView("_DetailsPartial", workOrder);
         }
 
         // GET: WorkOrders/Create
@@ -68,6 +70,7 @@ namespace ReslifeWorkorderManagement.Controllers
         }
 
         // GET: WorkOrders/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,8 +83,13 @@ namespace ReslifeWorkorderManagement.Controllers
             {
                 return NotFound();
             }
-            ViewData["WorkOrderAssigneeId"] = new SelectList(_context.Users, "Id", "Id", workOrder.WorkOrderAssigneeId);
-            return View(workOrder);
+            WorkOrderVM model = new WorkOrderVM()
+            {
+                Note = workOrder.Note
+            };
+
+            ViewData["WorkOrderId"] = id;
+            return PartialView("_EditWorkOrderPartial", model);
         }
 
         // POST: WorkOrders/Edit/5
@@ -89,13 +97,10 @@ namespace ReslifeWorkorderManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RequesterFirstName,RequesterLastName,RequesterEmail,Request,Building,Area,Floor,RoomNumber,Progress,Note,WorkOrderAssigneeId")] WorkOrder workOrder)
+        public async Task<IActionResult> Edit(int id, WorkOrderVM model)
         {
-            if (id != workOrder.Id)
-            {
-                return NotFound();
-            }
-
+            var workOrder = await _context.WorkOrder.FindAsync(id);
+            workOrder.Note = model.Note;
             if (ModelState.IsValid)
             {
                 try
@@ -107,20 +112,20 @@ namespace ReslifeWorkorderManagement.Controllers
                 {
                     if (!WorkOrderExists(workOrder.Id))
                     {
-                        return NotFound();
+                        return Json(new { success = false, message = "Workorder does not exist." });
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Note is edited successfully." });
             }
-            ViewData["WorkOrderAssigneeId"] = new SelectList(_context.Users, "Id", "Id", workOrder.WorkOrderAssigneeId);
-            return View(workOrder);
+            return View(model);
         }
 
         // GET: WorkOrders/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,12 +141,12 @@ namespace ReslifeWorkorderManagement.Controllers
                 return NotFound();
             }
 
-            return View(workOrder);
+            ViewData["WorkOrderId"] = id;
+            return PartialView("_DeleteWorkOrderPartial", workOrder);
         }
 
         // POST: WorkOrders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);
@@ -151,7 +156,33 @@ namespace ReslifeWorkorderManagement.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Workorder is deleted successfully." });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> updateProgress(int id, string newProgress)
+        {
+            var workOrder = await _context.WorkOrder.FindAsync(id);
+
+            if(workOrder == null)
+            {
+                return Json(new { success = false, message = "WorkOrder not found" });
+            }
+            try
+            {
+                if (Enum.TryParse(typeof(Progress), newProgress, out var statusValue))
+                {
+                    workOrder.Progress = (Progress)statusValue;
+                }
+                _context.Update(workOrder);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, workOrderId = id, progress = newProgress });
+
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = "Something went wrong while updaitng progress. Try again." });
+            }
         }
 
         private bool WorkOrderExists(int id)

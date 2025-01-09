@@ -16,18 +16,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/ReslifeWorkorderManagement.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WorkOrderDemo</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </nav>
-    </header>
+<body class="short">
     <div class="container">
         <div class="sidebar">
             <div class="sidebartop">
@@ -40,8 +29,8 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="#"><i class="bi bi-clipboard-data-fill"></i><span class="sidebar-text">Dashboard</span></a></li>
-                    <li><a href="#"><i class="bi bi-hammer"></i><span class="sidebar-text">Workorders</span></a></li>
+                    <li><a href="/Dashboard/Index"><i class="bi bi-clipboard-data-fill"></i><span class="sidebar-text">Dashboard</span></a></li>
+                    <li><a href="/WorkOrders/Index"><i class="bi bi-hammer"></i><span class="sidebar-text">Workorders</span></a></li>
                     <li><a href="#"><i class="bi bi-people"></i><span class="sidebar-text">Staffs</span></a></li>
                 </ul>
             </nav>
@@ -89,6 +78,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/side-bar.js" asp-append-version="true"></script>
+    <script src="~/js/filter.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

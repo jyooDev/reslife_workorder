@@ -1,15 +1,14 @@
 ﻿@model ReslifeWorkorderManagement.Models.WorkOrder
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Workorder";
+    Layout = "_Staff-Layout";
 }
 
-<h1>Create</h1>
-
-<h4>WorkOrder</h4>
+<h1>Create Workorder</h1>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -51,20 +50,6 @@
                 <label asp-for="RoomNumber" class="control-label"></label>
                 <input asp-for="RoomNumber" class="form-control" />
                 <span asp-validation-for="RoomNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Progress" class="control-label"></label>
-                <select asp-for="Progress" class="form-control"></select>
-                <span asp-validation-for="Progress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Note" class="control-label"></label>
-                <input asp-for="Note" class="form-control" />
-                <span asp-validation-for="Note" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WorkOrderAssigneeId" class="control-label"></label>
-                <select asp-for="WorkOrderAssigneeId" class ="form-control" asp-items="ViewBag.WorkOrderAssigneeId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
