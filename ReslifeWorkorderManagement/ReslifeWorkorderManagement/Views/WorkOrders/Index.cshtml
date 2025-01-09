@@ -115,7 +115,7 @@
                 <td data-cell="name">
                     @Html.DisplayFor(modelItem => item.RequesterFirstName)  @Html.DisplayFor(modelItem => item.RequesterLastName)
                 </td>
-                <td data-cell="name">
+                <td data-created="@item.CreatedAt">
                     @Html.DisplayFor(modelItem => item.CreatedAt)
                 </td>
                 <td data-cell="request">
@@ -349,74 +349,3 @@
         box-sizing: border-box;
     }
 </style>
-
-<script>
-    document.addEventListener("DOMContentLoaded", (event) => {
-        styleAllProgressDropdown();
-    });
-
-    function styleAllProgressDropdown() {
-        const ProgressDropdown = document.querySelectorAll(".progress-dropdown");
-        ProgressDropdown.forEach((element) => {
-            const progress = element.value;
-            if (progress == 0) {
-                element.classList.add("progress-requested");
-            }
-            else if (progress == 1) {
-                element.classList.add("progress-inprogress");
-            }
-            else {
-                element.classList.add("progress-complete");
-            }
-        });
-    }
-
-    function styleProgressDropdown(id, newProgress) {
-        const element = document.querySelector(`.progress-dropdown[data-id="${id}"]`);
-        console.log(element);
-        if (!element) {
-            console.error(`No dropdown found with data-id="${id}"`);
-            return;
-        }       
-        element.className = "";
-        element.classList.add("badge");
-        element.classList.add("progress-dropdown");
-        if (newProgress == 0) {
-            element.classList.add("progress-requested");
-        }
-        else if (newProgress == 1) {
-            element.classList.add("progress-inprogress");
-        }
-        else {
-            element.classList.add("progress-complete");
-        }
-    }
-
-    function updateProgress(selectElement) {
-
-        const newProgress = selectElement.value;
-        var url = $(selectElement).data('url');
-        var sendData = {
-            newProgress: newProgress
-        };
-
-        console.log('URL: ', url);
-        console.log("Progress", newProgress);
-
-        $.post(url, sendData).done(function (response) {
-            console.log('Response Success: ', response.success);
-            if (response.success) {
-                styleProgressDropdown(response.workOrderId, response.progress);
-            }
-            else {
-                if (!(response.message == undefined)) {
-                    alert(response.message);
-                }
-            }
-        }).fail(function () {
-            alert("Failed to update status.")
-        });
-    }
-</script>
-
-
