@@ -72,10 +72,13 @@
 
 
     <table id="workOrdersTable">
-        <thead>
+        <thead id="workOrdersTableHead">
             <tr>
                 <th>
                     Name
+                </th>
+                <th>
+                    Created At
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Request)
@@ -111,6 +114,9 @@
             <tr>
                 <td data-cell="name">
                     @Html.DisplayFor(modelItem => item.RequesterFirstName)  @Html.DisplayFor(modelItem => item.RequesterLastName)
+                </td>
+                <td data-cell="name">
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
                 </td>
                 <td data-cell="request">
                     @Html.DisplayFor(modelItem => item.Request)
@@ -212,9 +218,9 @@
 
     #filterPanel {
         position: absolute;
-        right: 0; /* Align with the button */
-        width: 100%; /* Match width to the table or parent container */
-        z-index: 1000; /* Ensure it appears above other elements */
+        right: 0;
+        width: 100%; 
+        z-index: 1000; 
         background-color: rgba(242, 245, 247, 0.9);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -299,6 +305,7 @@
 
     thead{
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: sticky;
     }
     th{
         position: sticky;

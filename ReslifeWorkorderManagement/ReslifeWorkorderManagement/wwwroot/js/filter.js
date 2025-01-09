@@ -3,21 +3,13 @@
     const progressFilter = Array.from(document.getElementById("progressFilter").selectedOptions).map(option => option.value);
     const areaFilter = Array.from(document.getElementById("areaFilter").selectedOptions).map(option => option.value);
 
-    console.log("building selected: ", buildingFilter);
-    console.log("progress selected: ", progressFilter);
-    console.log("area selected: ", areaFilter);
-
     const rows = document.querySelectorAll("#workOrdersTable tbody tr");
-    console.log(rows);
 
     rows.forEach((row) => {
         const building = row.querySelector('[data-cell="building"]').textContent.trim();
         const progress = row.querySelector('.progress-dropdown').value;
         const area = row.querySelector('[data-cell="area"]').textContent.trim();
 
-        console.log(building);
-        console.log(progress);
-        console.log(area);
 
         let isVisible = true;
 
@@ -36,10 +28,28 @@
 
         row.style.display = isVisible ? "" : "none";
     });
+    styleVisibleRows();
 });
 
 document.getElementById("resetFilters").addEventListener("click", function () {
-    const buildingFilter = Array.from(document.getElementById("buildingFilter").selectedOptions).map(option => option.value);
-    const progressFilter = Array.from(document.getElementById("progressFilter").selectedOptions).map(option => option.value);
-    const areaFilter = Array.from(document.getElementById("areaFilter").selectedOptions).map(option => option.value);
+    document.getElementById("buildingFilter").value = "All";
+    document.getElementById("progressFilter").value = "All";
+    document.getElementById("areaFilter").value = "All";
+    const rows = document.querySelectorAll("#workOrdersTable tbody tr");
 });
+
+
+function styleVisibleRows() {
+    const rows = Array.from(document.querySelectorAll("#workOrdersTable tbody tr"));
+    let visibleIndex = 0;
+    rows.forEach((row) => {
+        if (row.style.display === "") {
+            if (visibleIndex % 2 === 1) {           
+                row.style.background = "hsl(0 50% 0% / 0.05)"; 
+            } else {
+                row.style.background = "#f7f7f7";
+            }
+            visibleIndex++;
+        }
+    });
+}
