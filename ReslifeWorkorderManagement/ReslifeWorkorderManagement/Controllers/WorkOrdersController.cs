@@ -159,6 +159,32 @@ namespace ReslifeWorkorderManagement.Controllers
             return Json(new { success = true, message = "Workorder is deleted successfully." });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> updateProgress(int id, string newProgress)
+        {
+            var workOrder = await _context.WorkOrder.FindAsync(id);
+
+            if(workOrder == null)
+            {
+                return Json(new { success = false, message = "WorkOrder not found" });
+            }
+            try
+            {
+                if (Enum.TryParse(typeof(Progress), newProgress, out var statusValue))
+                {
+                    workOrder.Progress = (Progress)statusValue;
+                }
+                _context.Update(workOrder);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Progress updated successfully." });
+
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = "Something went wrong while updaitng progress. Try again." });
+            }
+        }
+
         private bool WorkOrderExists(int id)
         {
             return _context.WorkOrder.Any(e => e.Id == id);

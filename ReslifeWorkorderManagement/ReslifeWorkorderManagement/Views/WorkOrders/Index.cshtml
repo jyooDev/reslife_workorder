@@ -67,24 +67,12 @@
                     @Html.DisplayFor(modelItem => item.RoomNumber)
                 </td>
                 <td data-cell="progress">
-                        @if (item.Progress == Progress.Requested)
-                        {
-                            <div class="badge progress-requested text-uppercase">
-                                @Html.DisplayFor(modelItem => item.Progress)
-                            </div>
-                        }
-                        else if (item.Progress == Progress.InProgress)
-                        {
-                            <div class="badge progress-inprogress text-uppercase">
-                                @Html.DisplayFor(modelItem => item.Progress)
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="badge progress-complete text-uppercase">
-                                Complete
-                            </div>
-                        }
+                        <select asp-for="@item.Progress"
+                                class="badge progress-dropdown"
+                                asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Progress>()"
+                                onchange="updateProgress(this)"
+                                data-url="@Url.Action("UpdateProgress", "WorkOrders", new { id = item.Id })">
+                        </select>
                 </td>
                 <td data-cell="note">
                     @Html.DisplayFor(modelItem => item.Note)
@@ -169,16 +157,28 @@
         color: black;
     }
 
-    .progress-requested{
-        background-color: rgba(180, 16, 49, 0.33)
+    .progress-dropdown{
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        text-decoration: none;
+        outline: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: none;
+        appearance: none;
+    }
+    .progress-dropdown.progress-requested {
+        background-color: rgba(180, 16, 49, 0.33);
+        color: rgb(112, 0, 23);
     }
 
-    .progress-inprogress{
-        background-color: rgba(255, 187, 17, 0.33)
+    .progress-dropdown.progress-inprogress {
+        background-color: rgba(255, 187, 17, 0.33);
+        color: rgba(161, 115, 0);
     }
 
-    .progress-complete{
+    .progress-dropdown.progress-complete {
         background-color: rgba(95, 207, 98, 0.51);
+        color: rgba(40, 84, 42);
     }
 
     .assignee-box{
@@ -238,18 +238,52 @@
         margin-bottom: 15px; /* Space between cards */
         box-sizing: border-box;
     }
-
-    /* Card styling */
-    .bg-light {
-        width: 100%; /* Ensure card spans full width */
-        border: 1px solid #ddd;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-    }
-
-    .text-secondary {
-        font-size: 0.8rem;
-        color: #6c757d;
-    }
-
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+        styleProgressDropdown();
+    });
+
+    function styleProgressDropdown() {
+        const ProgressDropdown = document.querySelectorAll(".progress-dropdown");
+        ProgressDropdown.forEach((element) => {
+            const progress = element.value;
+            if (progress == 0) {
+                element.classList.add("progress-requested");
+            }
+            else if (progress == 1) {
+                element.classList.add("progress-inprogress");
+            }
+            else {
+                element.classList.add("progress-complete");
+            }
+        });
+    }
+
+    function updateProgress(selectElement) {
+
+        const newProgress = selectElement.value;
+        var url = $(selectElement).data('url');
+        var sendData = {
+            newProgress: newProgress
+        };
+
+        console.log('URL: ', url);
+        console.log("Progress", newProgress);
+
+        $.post(url, sendData).done(function (response) {
+            console.log('Response Success: ', response.success);
+            if (response.success) {
+                styleProgressDropdown();
+            }
+            else {
+                if (!(response.message == undefined)) {
+                    alert(response.message);
+                }
+            }
+        }).fail(function () {
+            alert("Failed to update status.")
+        });
+    }
+</script>
