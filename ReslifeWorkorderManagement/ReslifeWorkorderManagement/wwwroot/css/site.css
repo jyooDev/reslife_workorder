@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --box-shadow: 5px 5px 8px 2px rgba(0, 0, 0, 0.1);
+    --yellow-primary: #FFD046;
+}
+
+
 html {
     font-size: 14px;
 }
@@ -19,7 +27,15 @@ html {
 
 body {
     margin-bottom: 60px;
-    font-family: sans-serif;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: poppins, sans-serif;
+    font-size: 0.70rem;
+    background-color: #f2f2f2;
 }
 
+
+.heading-line {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
