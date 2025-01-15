@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ReslifeWorkorderManagement.Models.WorkOrder>
+﻿@model DashboardVM
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -17,7 +17,7 @@
                 <h4>Requested</h4>
             </div>
             <div class="right-workorder">
-                <h1>50</h1>
+                <h1>@Model.requestedWorkOrders</h1>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
                 <h4>In Progress</h4>
             </div>
             <div class="right-workorder">
-                <h1>50</h1>
+                <h1>@Model.inProgressWorkOrders</h1>
             </div>
         </div>
     </div>
@@ -38,10 +38,10 @@
         <div class="middle">
             <div class="left">
                 <h6>Total Workorder</h6>
-                <h4>Completed</h4>
+                <h4>Complete</h4>
             </div>
             <div class="right-workorder">
-                <h1>50</h1>
+                <h1>@Model.completeWorkOrders</h1>
             </div>
         </div>
     </div>
@@ -49,7 +49,7 @@
 
 <!---- Recent Workorders ----->
 <div class="recent-workorders">
-    <h2> Recent WorkOrders</h2>
+    <h2> Recent Work Orders</h2>
     
     <table>
         <thead>
@@ -61,18 +61,18 @@
                     Created At
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Request)
+                    Request
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Building)
+                    Building
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Progress)
+                    Progress
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.workOrders)
             {
                 <tr>
                     <td data-cell="name">
@@ -94,6 +94,8 @@
             }
         </tbody>
     </table>
+    <div class="mt-2"></div>
+    <a href="/WorkOrders/Index">View all work orders</a>
 </div>
 <style>
 
