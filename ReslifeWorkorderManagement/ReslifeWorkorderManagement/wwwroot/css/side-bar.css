@@ -4,6 +4,7 @@
 }
 
 .sidebar {
+    box-shadow: var(--box-shadow);
     background: #333;
     color: white;
     width: 25%;
@@ -119,10 +120,12 @@
     color: white;
 }
 
-/*main body*/
-main {
-    margin-left: calc(5%);
-    margin-top:1rem;
+
+
+.main-layout {
+    margin-left: calc(10%);
+    margin-right: calc(3%);
+    margin-top: 1rem;
 }
 
 .short .sidebar{
