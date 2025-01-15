@@ -50,6 +50,7 @@
 <!---- Recent Workorders ----->
 <div class="recent-workorders">
     <h2> Recent WorkOrders</h2>
+    
     <table>
         <thead>
             <tr>
@@ -146,16 +147,49 @@
     }
 
     .recent-workorders table {
-        background: white;
         width: 100%;
         padding: 2rem;
         text-align: center;
         box-shadow: var(--box-shadow);
+        border-radius: 10px;
     }
 
     .recent-workorders table tbody td{
         height: 2.8rem;
         border-bottom: 1px solid #f2f2f2;
         color: grey;
+    }
+
+    .recent-workorders td:last-child{
+        border-bottom: none;
+    }
+
+    .recent-workorders th, td {
+        padding: 10px;
+
+    }
+
+    .recent-workorders th{
+        background-color: var(--yellow-primary);
+    }
+
+    .recent-workorders td {
+        background-color: white;
+    }
+
+    .recent-workorders tr:first-child th:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    .recent-workorders tr:first-child th:last-child {
+        border-top-right-radius: 10px;
+    }
+
+    .recent-workorders tr:last-child td:first-child {
+        border-bottom-left-radius: 10px;
+    }
+
+    .recent-workorders tr:last-child td:last-child {
+        border-bottom-right-radius: 10px;
     }
 </style>
