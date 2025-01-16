@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using ReslifeWorkorderManagement.Data;
 using ReslifeWorkorderManagement.Models;
@@ -21,9 +22,48 @@ namespace ReslifeWorkorderManagement.Controllers
             _logger = logger;
             _context = context;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new Dictionary<string, List<StaffVM>>
+            {
+                { "Administrators", new List<StaffVM>() },
+                { "StudentSupervisors", new List<StaffVM>() },
+                { "MaintenanceStaffs", new List<StaffVM>() },
+                { "DeskStaffs", new List<StaffVM>() }
+            };
+
+            var userroles = await _context.UserRoles.ToListAsync();
+            var roles = await _context.Roles.ToListAsync();
+            foreach(ApplicationUser user in _userManager.Users)
+            {
+                var role = userroles.Where(ur => ur.UserId == user.Id)
+                    .Join(roles, userrole => userrole.RoleId, role => role.Id, (userrole, role) => role.Name).FirstOrDefault();
+                if(role != null)
+                {
+                    StaffVM staff = new StaffVM()
+                    {
+                        user = user,
+                        role = role
+                    };
+
+                    switch (role)
+                    {
+                        case "Administrator":
+                            model["Administrators"].Add(staff);
+                            break;
+                        case "StudentSupervisor":
+                            model["StudentSupervisors"].Add(staff);
+                            break;
+                        case "MaintenanceStaff":
+                            model["MaintenanceStaffs"].Add(staff);
+                            break;
+                        default:
+                            model["DeskStaffs"].Add(staff);
+                            break;
+                    }
+                }
+            }
+            return View(model);
         }
 
         public IActionResult Login()
