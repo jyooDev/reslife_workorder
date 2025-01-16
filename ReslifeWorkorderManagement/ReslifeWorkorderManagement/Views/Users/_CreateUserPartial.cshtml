@@ -1,0 +1,37 @@
+﻿@model UserCreateVM
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create User</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="form-label"></label>
+                        <input asp-for="FirstName" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="form-label"></label>
+                        <input asp-for="LastName" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control"/>
+                    </div>
+                    <input asp-for="Role" type="hidden" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green-btn" data-save="form">Save</button>
+                <button type="button" class="btn red-btn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

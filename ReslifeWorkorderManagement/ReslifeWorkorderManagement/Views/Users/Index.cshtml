@@ -41,15 +41,22 @@
                                     @staff.user.Email                        
                                 </td>
                                 <td data-cell="action">
-                                    <button data-toggle="modal" data-url="@Url.Action("Edit", "Users", new { id = staff.user.Id })" class="edit-icon-btn">
+                                    <a asp-controller="Users" asp-action="Edit" asp-route-id="@staff.user.Id" class="edit-icon-btn">
                                         <i class="bi bi-pencil edit-icon"></i>
-                                    </button>
+                                    </a>
                                     <button data-toggle="modal" data-url="@Url.Action("Delete", "Users", new { id = staff.user.Id })" class="delete-icon-btn">
                                         <i class="bi bi-trash details-icon"></i>
                                     </button>
                                 </td>
                             </tr>
                         }
+                        <tr class="add-staff-tr">
+                            <td colspan="3" class="add-staff">
+                                <button data-toggle="modal" data-url="@Url.Action("Create", "Users", new { role = "administrator" })" class="add-staff-btn">
+                                    + Add Staff
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -81,15 +88,22 @@
                                     @staff.user.Email
                                 </td>
                                 <td data-cell="action">
-                                    <button data-toggle="modal" data-url="@Url.Action("Edit", "Users", new { id = staff.user.Id })" class="edit-icon-btn">
+                                    <a asp-controller="Users" asp-action="Edit" asp-route-id="@staff.user.Id" class="edit-icon-btn">
                                         <i class="bi bi-pencil edit-icon"></i>
-                                    </button>
+                                    </a>
                                     <button data-toggle="modal" data-url="@Url.Action("Delete", "Users", new { id = staff.user.Id })" class="delete-icon-btn">
                                         <i class="bi bi-trash details-icon"></i>
                                     </button>
                                 </td>
                             </tr>
                         }
+                        <tr class="add-staff-tr">
+                            <td colspan="3" class="add-staff">
+                                <button data-toggle="modal" data-url="@Url.Action("Create", "Users", new { role = "studentSupervisor" })" class="add-staff-btn">
+                                    + Add Staff
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -122,15 +136,23 @@
                                     @staff.user.Email
                                 </td>
                                 <td data-cell="action">
-                                    <button data-toggle="modal" data-url="@Url.Action("Edit", "Users", new { id = staff.user.Id })" class="edit-icon-btn">
+                                    <a asp-controller="Users" asp-action="Edit" asp-route-id="@staff.user.Id" class="edit-icon-btn">
                                         <i class="bi bi-pencil edit-icon"></i>
-                                    </button>
+                                    </a>
                                     <button data-toggle="modal" data-url="@Url.Action("Delete", "Users", new { id = staff.user.Id })" class="delete-icon-btn">
                                         <i class="bi bi-trash details-icon"></i>
                                     </button>
                                 </td>
                             </tr>
+
                         }
+                        <tr class="add-staff-tr">
+                            <td colspan="3" class="add-staff">
+                                <button data-toggle="modal" data-url="@Url.Action("Create", "Users", new { role = "maintenanceStaff" })" class="add-staff-btn">
+                                    + Add Staff
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -161,9 +183,9 @@
                                     @staff.user.Email
                                 </td>
                                 <td data-cell="action">
-                                    <button data-toggle="modal" data-url="@Url.Action("Edit", "Users", new { id = staff.user.Id })" class="edit-icon-btn">
+                                    <a asp-controller="Users" asp-action="Edit" asp-route-id="@staff.user.Id" class="edit-icon-btn">
                                         <i class="bi bi-pencil edit-icon"></i>
-                                    </button>
+                                    </a>
                                     <button data-toggle="modal" data-url="@Url.Action("Delete", "Users", new { id = staff.user.Id })" class="delete-icon-btn">
                                         <i class="bi bi-trash details-icon"></i>
                                     </button>
@@ -172,7 +194,7 @@
                         }
                         <tr class="add-staff-tr">
                             <td colspan="3" class="add-staff">
-                                <button data-toggle="modal" data-url="@Url.Action("Add", "Users", new { role = "deskStaff"})" class="add-staff-btn">
+                                <button data-toggle="modal" data-url="@Url.Action("Create", "Users", new { role = "deskStaff"})" class="add-staff-btn">
                                     + Add Staff
                                 </button>                                
                             </td>
@@ -238,35 +260,6 @@
         border: none;
         color: white;
         background-color: #303030;
-    }
-
-    .progress-dropdown {
-        padding: 0.5rem 0.75rem;
-        border-radius: 10px;
-        text-decoration: none;
-        outline: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border: none;
-        appearance: none;
-    }
-
-    .progress-dropdown.progress-requested {
-        background-color: rgba(180, 16, 49, 0.33);
-        color: rgb(112, 0, 23);
-    }
-
-    .progress-dropdown.progress-inprogress {
-        background-color: rgba(255, 187, 17, 0.33);
-        color: rgba(161, 115, 0);
-    }
-
-    .progress-dropdown.progress-complete {
-        background-color: rgba(95, 207, 98, 0.51);
-        color: rgba(40, 84, 42);
-    }
-
-    .assignee-box {
-        background-color: rgba(116, 116, 116, 0.86);
     }
 
     table {
