@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,6 +27,8 @@ namespace ReslifeWorkorderManagement.Controllers
             _logger = logger;
             _context = context;
         }
+
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var model = new Dictionary<string, List<StaffVM>>
@@ -112,6 +115,15 @@ namespace ReslifeWorkorderManagement.Controllers
             return View(model);
         }
 
+
+        [Authorize]
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync().ConfigureAwait(false);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Create(string role)
         {
@@ -126,6 +138,7 @@ namespace ReslifeWorkorderManagement.Controllers
             return PartialView("_CreateUserPartial", model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(UserCreateVM newUser)
         {
@@ -179,6 +192,8 @@ namespace ReslifeWorkorderManagement.Controllers
             return Json(new { success = true, message = "User is added succesfully." });
         }
 
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
@@ -195,6 +210,8 @@ namespace ReslifeWorkorderManagement.Controllers
             return PartialView("_DeleteUserPartial", user);
         }
 
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
@@ -212,6 +229,8 @@ namespace ReslifeWorkorderManagement.Controllers
             return Json(new { success = true, message = "User is deleted successfully." });
         }
 
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -238,6 +257,8 @@ namespace ReslifeWorkorderManagement.Controllers
             return View("Edit", model);
         }
 
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(UserEditVM model)
         {
