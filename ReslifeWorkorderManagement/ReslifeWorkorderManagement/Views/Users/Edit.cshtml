@@ -1,0 +1,47 @@
+﻿@model ReslifeWorkorderManagement.Models.UserEditVM
+@{
+    ViewData["Title"] = "Edit Staffs";
+    Layout = "_Staff-Layout";
+}
+<div class="d-flex justify-content-between align-items-center heading-line">
+    <h1>Edit Staff Information</h1>
+</div>
+<div>
+    <form asp-action="Edit" method="post">
+        <div class="form-group">
+            <label asp-for="FirstName" class="form-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="form-label"></label>
+            <input asp-for="LastName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Role" class="form-label">Role</label>
+            <select asp-for="Role" class="form-control">
+                <option value="Administrator">Administrator</option>
+                <option value="StudentSupervisor">Student Supervisor</option>
+                <option value="MaintenanceStaff">Maintenance Staff</option>
+                <option value="DeskStaff">Desk Staff</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <h5>Change Password</h5>
+            <div class="form-group">
+                <label asp-for="OldPassword" class="form-label">Old Password</label>
+                <input asp-for="OldPassword" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="NewPassword" class="form-label">New Password</label>
+                <input asp-for="NewPassword" class="form-control" />
+            </div>
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div mt-3></div>
+        <button type="submit" class="btn btn-light w-100 p-2">Submit</button>
+    </form>
+</div>

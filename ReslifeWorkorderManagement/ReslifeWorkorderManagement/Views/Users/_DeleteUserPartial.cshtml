@@ -1,0 +1,20 @@
+﻿@model ApplicationUser
+
+<div class="modal fade" id="deleteWorkorder" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Work Order</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <p>
+                        Are you sure you want to remove this user</strong>?
+                    </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-save="post" data-url="@Url.Action("DeleteConfirmed", "Users", new { id = Model.Id })">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
