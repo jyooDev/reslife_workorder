@@ -66,7 +66,9 @@ function updateProgress(selectElement) {
     });
     sortByProgressAndCreatedTime();
 }
-document.getElementById("applyFilters").addEventListener("click", function () {
+
+function ApplyFilters() {
+
     const buildingFilter = Array.from(document.getElementById("buildingFilter").selectedOptions).map(option => option.value);
     const progressFilter = Array.from(document.getElementById("progressFilter").selectedOptions).map(option => option.value);
     const areaFilter = Array.from(document.getElementById("areaFilter").selectedOptions).map(option => option.value);
@@ -97,15 +99,14 @@ document.getElementById("applyFilters").addEventListener("click", function () {
         row.style.display = isVisible ? "" : "none";
     });
     styleVisibleRows();
-});
+}
 
-document.getElementById("resetFilters").addEventListener("click", function () {
+function ResetFilters() {
     document.getElementById("buildingFilter").value = "All";
     document.getElementById("progressFilter").value = "All";
     document.getElementById("areaFilter").value = "All";
-    const rows = document.querySelectorAll("#workOrdersTable tbody tr");
-});
-
+    ApplyFilters();
+}
 
 function styleVisibleRows() {
     const rows = Array.from(document.querySelectorAll("#workOrdersTable tbody tr"));
