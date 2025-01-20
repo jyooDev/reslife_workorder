@@ -17,52 +17,57 @@
     <link rel="stylesheet" href="~/ReslifeWorkorderManagement.styles.css" asp-append-version="true" />
 </head>
 <body class="short">
-    <div class="container">
-        <div class="sidebar">
-            <div class="sidebartop">
-                <div class="logo">
-                    UW SUPERIOR 
+        <nav>
+            <div class="mobile-menu">
+                <i class="bi bi-list mobile-menu-icon"></i>
+            </div>
+        </nav>
+        <aside id="aside-sidebar">
+            <div class="sidebar">
+                <div class="sidebartop">
+                    <div class="logo">
+                        UW SUPERIOR 
+                    </div>
+                    <div class="menu">
+                        <i class="bi bi-list"></i>
+                    </div>
                 </div>
-                <div class="menu">
-                    <i class="bi bi-list"></i>
+                <div class="sidebar-nav">
+                    <ul>
+                        <li><a href="/Dashboard/Index"><i class="bi bi-clipboard-data-fill"></i><span class="sidebar-text">Dashboard</span></a></li>
+                        <li><a href="/WorkOrders/Index"><i class="bi bi-hammer"></i><span class="sidebar-text">Workorders</span></a></li>
+                        <li><a href="/Users/Index"><i class="bi bi-people"></i><span class="sidebar-text">Staffs</span></a></li>
+                    </ul>
+                </div>
+                <div class="account">
+                    <div class="avatar">
+                        <img src="/images/logo.png" alt="" />
+                    </div>
+                    <div class="name">
+                        <h4>@firstName @lastName</h4>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <span>Administrator</span>
+                        }
+                        else if (User.IsInRole("MaintenanceStaff"))
+                        {
+                            <span>Maintenance Staff</span>
+                        }
+                        else if (User.IsInRole("DeskStaff"))
+                        {
+                            <span>YU Desk Staff</span>
+                        }
+                        else if (User.IsInRole("StudentSupervisor"))
+                        {
+                            <span>Student Supervisor</span>
+                        }
+                    </div>
+                    <div class="sidebar-logout">
+                        <a href="/Users/Logout"><i class="bi bi-box-arrow-left"></i></a>
+                    </div>
                 </div>
             </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="/Dashboard/Index"><i class="bi bi-clipboard-data-fill"></i><span class="sidebar-text">Dashboard</span></a></li>
-                    <li><a href="/WorkOrders/Index"><i class="bi bi-hammer"></i><span class="sidebar-text">Workorders</span></a></li>
-                    <li><a href="/Users/Index"><i class="bi bi-people"></i><span class="sidebar-text">Staffs</span></a></li>
-                </ul>
-            </nav>
-            <div class="account">
-                <div class="avatar">
-                    <img src="/images/logo.png" alt="" />
-                </div>
-                <div class="name">
-                    <h4>@firstName @lastName</h4>
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <span>Administrator</span>
-                    }
-                    else if (User.IsInRole("MaintenanceStaff"))
-                    {
-                        <span>Maintenance Staff</span>
-                    }
-                    else if (User.IsInRole("DeskStaff"))
-                    {
-                        <span>YU Desk Staff</span>
-                    }
-                    else if (User.IsInRole("StudentSupervisor"))
-                    {
-                        <span>Student Supervisor</span>
-                    }
-                </div>
-                <div class="sidebar-logout">
-                    <a href="/Users/Logout"><i class="bi bi-box-arrow-left"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
+        </aside>
     <div class="main-layout">
         <main role="main" class="pb-3">
             @RenderBody()
