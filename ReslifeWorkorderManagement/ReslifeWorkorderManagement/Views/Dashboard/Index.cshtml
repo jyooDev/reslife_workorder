@@ -135,6 +135,10 @@
         grid-template-columns: 3fr 1fr; /* Left section takes 75%, right section 25% */
         gap: 2rem; /* Space between columns */
         margin-top: 2rem;
+
+        @@media screen and (max-width: 768px){
+            grid-template-columns: 1fr;
+        }
     }
 
     .left-section {
@@ -146,6 +150,10 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1.6rem;
+
+        @@media screen and (max-width: 768px){
+            grid-template-columns: 1fr;
+        }
     }
 
     .insights > div {
