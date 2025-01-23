@@ -207,6 +207,7 @@ nav{
         background: rgba(54, 54, 54, 95%);
         width: 50%;
         transition: width .50s ease-in-out;
+        font-size: 18px;
     }
 
     .sidebartop {

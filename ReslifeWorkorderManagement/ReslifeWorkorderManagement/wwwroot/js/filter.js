@@ -20,24 +20,26 @@ function styleAllProgressDropdown() {
 }
 
 function styleProgressDropdown(id, newProgress) {
-    const element = document.querySelector(`.progress-dropdown[data-id="${id}"]`);
-    console.log(element);
-    if (!element) {
-        console.error(`No dropdown found with data-id="${id}"`);
-        return;
-    }
-    element.className = "";
-    element.classList.add("badge");
-    element.classList.add("progress-dropdown");
-    if (newProgress == 0) {
-        element.classList.add("progress-requested");
-    }
-    else if (newProgress == 1) {
-        element.classList.add("progress-inprogress");
-    }
-    else {
-        element.classList.add("progress-complete");
-    }
+    const elements = document.querySelectorAll(`.progress-dropdown[data-id="${id}"]`);
+    console.log("elements: ", elements);
+    (elements).forEach((element) => {
+        if (!element) {
+            console.error(`No dropdown found with data-id="${id}"`);
+            return;
+        }
+        element.className = "";
+        element.classList.add("badge");
+        element.classList.add("progress-dropdown");
+        if (newProgress == 0) {
+            element.classList.add("progress-requested");
+        }
+        else if (newProgress == 1) {
+            element.classList.add("progress-inprogress");
+        }
+        else {
+            element.classList.add("progress-complete");
+        }
+    }); 
 }
 
 function updateProgress(selectElement) {
@@ -48,13 +50,14 @@ function updateProgress(selectElement) {
         newProgress: newProgress
     };
 
-    console.log('URL: ', url);
-    console.log("Progress", newProgress);
+/*    console.log('URL: ', url);
+    console.log("Progress", newProgress);*/
 
     $.post(url, sendData).done(function (response) {
-        console.log('Response Success: ', response.success);
+        console.log('Response Success: ', response.success);/**/
         if (response.success) {
             styleProgressDropdown(response.workOrderId, response.progress);
+            location.reload()
         }
         else {
             if (!(response.message == undefined)) {
@@ -66,6 +69,31 @@ function updateProgress(selectElement) {
     });
     sortByProgressAndCreatedTime();
 }
+function updateAssignee(selectElement) {
+    const newAssignee = selectElement.value;
+    var url = selectElement.dataset.url;
+    var sendData = {        
+        newAssigneeId: newAssignee
+    };
+
+/*    console.log("URL:", url);
+    console.log("newAssignee: ", newAssignee);
+    console.log("senddata: ", sendData);*/
+    $.post(url, sendData).done(function (response) {
+/*        console.log('Response Success: ', response.success);*/
+        if (response.success) {
+            alert(response.message);
+            location.reload();
+        }
+        else {
+            if (!(response.message == undefined)) {
+                alert(response.message);
+            }
+        }
+    }).fail(function () {
+        alert("Failed to update status.")
+    });
+}
 
 function ApplyFilters() {
 
@@ -74,7 +102,29 @@ function ApplyFilters() {
     const areaFilter = Array.from(document.getElementById("areaFilter").selectedOptions).map(option => option.value);
 
     const rows = document.querySelectorAll("#workOrdersTable tbody tr");
+    const cardContainers = document.querySelectorAll(".card-container");
+   /* console.log(cardContainers);*/
+    cardContainers.forEach((cardContainer) => {
+        const building = cardContainer.querySelector('[data-cell="building"]').textContent.trim();
+        const progress = cardContainer.querySelector('.progress-dropdown').value;
+        const area = cardContainer.querySelector('[data-cell="area"]').textContent.trim();
 
+
+        let isVisible = true;
+
+        if (!(buildingFilter.includes("All") || buildingFilter.includes(building))) {
+            isVisible = false;
+            /*console.log("Building: ", building);*/
+        }
+        if (!(progressFilter.includes("All") || progressFilter.includes(progress))) {
+            isVisible = false;
+        }
+        if (!(areaFilter.includes("All") || areaFilter.includes(area))) {
+            isVisible = false;
+        }
+
+        cardContainer.style.display = isVisible ? "" : "none";
+    })
     rows.forEach((row) => {
         const building = row.querySelector('[data-cell="building"]').textContent.trim();
         const progress = row.querySelector('.progress-dropdown').value;
@@ -93,11 +143,13 @@ function ApplyFilters() {
             isVisible = false;
         }
         else {
-            console.log("Room selected");
+            /*console.log("Room selected");*/
         }
 
         row.style.display = isVisible ? "" : "none";
     });
+
+
     styleVisibleRows();
 }
 
@@ -129,18 +181,30 @@ function sortByProgressAndCreatedTime() {
         const progressA = parseInt(a.querySelector('.progress-dropdown').value, 10);
         const progressB = parseInt(b.querySelector(".progress-dropdown").value, 10);
 
-        console.log(progressA);
-        console.log(progressB);
         if (progressA !== progressB) {
-            console.log("What");
             return progressA - progressB;
         }
         const createdTimeA = new Date(a.querySelector("[data-created]").getAttribute("data-created")).getTime();
         const createdTimeB = new Date(b.querySelector("[data-created]").getAttribute("data-created")).getTime();
-        console.log(createdTimeA);
+        
         return createdTimeB - createdTimeA; 
     });
 
     const tbody = document.querySelector("#workOrdersTable tbody");
     rows.forEach((row) => tbody.appendChild(row));
+    const cardContainers = Array.from(document.querySelectorAll(".card-container"));
+    cardContainers.sort((a, b) => {
+        const progressA = parseInt(a.querySelector('.progress-dropdown').value, 10);
+        const progressB = parseInt(b.querySelector(".progress-dropdown").value, 10);
+
+        if (progressA !== progressB) {
+            return progressA - progressB;
+        }
+        const createdTimeA = new Date(a.querySelector("[data-created]").getAttribute("data-created")).getTime();
+        const createdTimeB = new Date(b.querySelector("[data-created]").getAttribute("data-created")).getTime();
+        
+        return createdTimeB - createdTimeA;
+    });
+    const fullContainer = document.querySelector(".full-width-container");
+    cardContainers.forEach((cardContainer) => fullContainer.appendChild(cardContainer));
 }

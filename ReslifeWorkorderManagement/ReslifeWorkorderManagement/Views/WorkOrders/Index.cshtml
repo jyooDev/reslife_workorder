@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ReslifeWorkorderManagement.Models.WorkOrder>
+﻿@model WorkOrderAssigneeVM
 
 @{
     ViewData["Title"] = "WorkOrders";
@@ -81,25 +81,25 @@
                     Created At
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Request)
+                    Request
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Building)
+                    Building
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Area)
+                    Area
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Floor)
+                    Floor
                 </th>
                 <th>
                     Room
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Progress)
+                    Progress
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Note)
+                    Note
                 </th>
                 <th>
                     Assignee
@@ -110,13 +110,13 @@
             </tr>
         </thead>
         <tbody>
-    @foreach (var item in Model) {
+    @foreach (var item in Model.WorkOrders) {
             <tr>
                 <td data-cell="name">
                     @Html.DisplayFor(modelItem => item.RequesterFirstName)  @Html.DisplayFor(modelItem => item.RequesterLastName)
                 </td>
                 <td data-created="@item.CreatedAt">
-                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                    @item.CreatedAt.ToString().Split(' ').FirstOrDefault()
                 </td>
                 <td data-cell="request">
                     @Html.DisplayFor(modelItem => item.Request)
@@ -145,8 +145,35 @@
                 <td data-cell="note">
                     @Html.DisplayFor(modelItem => item.Note)
                 </td>
-                <td data-cell="assignee">
-                    @Html.DisplayFor(modelItem => item.WorkOrderAssignee.Id)
+                <td>
+                        <select asp-for="@item.WorkOrderAssignee"
+                                class="badge assignee-box"
+                                data-workorder-id="@item.Id"
+                                data-url="@Url.Action("UpdateAssignee","WorkOrders", new { Id = @item.Id })"
+                                onchange="updateAssignee(this)">
+                            @if (string.IsNullOrEmpty(@item.WorkOrderAssigneeId))
+                            {
+                                <option selected value="">
+                                    Select Assignee
+                                </option>
+                            }
+                            @foreach(var assignee in Model.Assignees)
+                            {
+                                if (@item.WorkOrderAssigneeId == assignee.Value)
+                                {
+                                    <option selected value="@assignee.Value")>
+                                    @assignee.Text
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@assignee.Value" )>
+                                        @assignee.Text
+                                    </option>
+                                }
+                            }
+                        </select>
+
                 </td>
                 <td data-cell="action">
                     <button data-toggle="modal" data-url="@Url.Action("Edit", "WorkOrders", new { id = item.Id })" class="edit-icon-btn">
@@ -166,11 +193,9 @@
 </div>
 
 <div class="full-width-container mobile-view">
-    @foreach (var item in Model)
+    @foreach (var item in Model.WorkOrders)
     {
         <div class="card-container">
-            <div class="bg-light p-4 rounded shadow">
-                <!-- Top Row: Name, Email, Status -->
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <strong>@Html.DisplayFor(modelItem => item.RequesterFirstName) @Html.DisplayFor(modelItem => item.RequesterLastName)</strong>
@@ -178,24 +203,15 @@
                     <div>
                         @Html.DisplayFor(modelItem => item.RequesterEmail)
                      </div>
-                    @if (item.Progress == Progress.Requested)
-                    {
-                        <div class="badge progress-requested text-uppercase">
-                            @Html.DisplayFor(modelItem => item.Progress)
-                        </div>
-                    }
-                    else if (item.Progress == Progress.InProgress)
-                    {
-                        <div class="badge progress-inprogress text-uppercase">
-                            @Html.DisplayFor(modelItem => item.Progress)
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="badge progress-complete text-uppercase">
-                            Complete
-                        </div>
-                    }
+                    <div data-cell="progress">
+                        <select asp-for="@item.Progress"
+                                class="badge progress-dropdown"
+                                asp-items="Html.GetEnumSelectList<ReslifeWorkorderManagement.Models.Progress>()"
+                                onchange="updateProgress(this)"
+                                data-url="@Url.Action("UpdateProgress", "WorkOrders", new { id = item.Id })"
+                                data-id="@item.Id">
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Request Content -->
@@ -203,11 +219,56 @@
                     Request: @Html.DisplayFor(modelItem => item.Request)
                 </div>
 
-                <!-- Assignee -->
-                <div class="badge assignee-box">
-                    Assigned to @Html.DisplayFor(modelItem => item.WorkOrderAssignee.Id)
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        Building: <span data-cell="building">@Html.DisplayFor(modelItem => item.Building)</span>
+                     </div>
+                    @if (item.Floor != 0)
+                    {
+                        <div>
+                            Floor: @item.Floor
+                        </div>
+                    }
+                    <div>
+                        Area: <span data-cell="area">@Html.DisplayFor(modelItem => item.Area)</span>
+                    </div>
                 </div>
-            </div>
+                <!-- Assignee -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                    Assignee:
+                    <select asp-for="@item.WorkOrderAssignee"
+                                class="badge assignee-box"
+                                data-workorder-id="@item.Id"
+                                data-url="@Url.Action("UpdateAssignee","WorkOrders", new { Id = @item.Id })"
+                                onchange="updateAssignee(this)">
+                            @if (string.IsNullOrEmpty(@item.WorkOrderAssigneeId))
+                            {
+                                <option selected value="">
+                                    Select Assignee
+                                </option>
+                            }
+                            @foreach(var assignee in Model.Assignees)
+                            {
+                                if (@item.WorkOrderAssigneeId == assignee.Value)
+                                {
+                                    <option selected value="@assignee.Value")>
+                                    @assignee.Text
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@assignee.Value" )>
+                                        @assignee.Text
+                                    </option>
+                                }
+                            }
+                    </select>
+                    </div>
+                    <div data-created="@item.CreatedAt">                                         
+                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                    </div>
+                </div>
         </div>
     }
 </div>
@@ -276,6 +337,13 @@
     }
 
     .assignee-box{
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        text-decoration: none;
+        outline: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: none;
+        appearance: none;
         background-color: rgba(116, 116, 116, 0.86);
     }
 
@@ -320,10 +388,10 @@
 
         .mobile-view{
             display: grid;
+            font-size: 18px;
         }
     }
 
-    /* Container spans full width of the viewport */
     .full-width-container {
         width: 100%;
         padding: 0;
@@ -331,11 +399,13 @@
         box-sizing: border-box;
     }
 
-    /* Each card container takes full width */
     .card-container {
-        width: 100%; /* Full width */
-        padding: 0 10px; /* Add padding for spacing between cards and edges */
-        margin-bottom: 15px; /* Space between cards */
+        width: 100%;
+        padding: 30px 30px;
+        margin-bottom: 20px; 
         box-sizing: border-box;
+        background-color: #f7f7f7;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 5%;
     }
 </style>
