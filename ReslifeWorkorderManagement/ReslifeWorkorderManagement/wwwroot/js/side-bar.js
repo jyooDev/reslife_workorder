@@ -1,8 +1,12 @@
 ﻿
 
 const menu = document.querySelector(".menu");
-
+const mobileMenu = document.querySelector(".mobile-menu");
 menu.addEventListener("click", function () {
+    expandSidebar();
+})
+
+mobileMenu.addEventListener("click", function () {
     expandSidebar();
 })
 function expandSidebar() {
@@ -14,6 +18,7 @@ function expandSidebar() {
         localStorage.removeItem("keepSidebar");
     }
 }
+
 function showHover() {
     const li = document.querySelectorAll(".short .sidebar-nav li a");
     if (li.length > 0) {

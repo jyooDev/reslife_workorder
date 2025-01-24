@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,24 +12,45 @@ using ReslifeWorkorderManagement.Models;
 
 namespace ReslifeWorkorderManagement.Controllers
 {
-    [Authorize]
+
     public class WorkOrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public WorkOrdersController(ApplicationDbContext context)
+        public WorkOrdersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: WorkOrders
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.WorkOrder.Include(w => w.WorkOrderAssignee);
-            return View(await applicationDbContext.ToListAsync());
+            var workOrders = await _context.WorkOrder.Include(w => w.WorkOrderAssignee).ToListAsync();
+            var users = await _context.Users.ToListAsync();
+            var userroles = await _context.UserRoles.ToListAsync();
+            var maintenanceRole = await _context.Roles.Where(r => r.Name == "MaintenanceStaff").FirstOrDefaultAsync();
+            var maintenanceUsers = userroles.Where(ur => ur.RoleId == maintenanceRole.Id)
+                .Join(users, ur => ur.UserId, u => u.Id, (ur, u) => u).ToList();
+
+            var assigneeList = maintenanceUsers.Select(u => new SelectListItem
+            {
+                Text = $"{u.FirstName} {u.LastName}",
+                Value = u.Id
+            }).ToList();
+
+            WorkOrderAssigneeVM model = new WorkOrderAssigneeVM()
+            {
+                WorkOrders = workOrders,
+                Assignees = assigneeList
+            };
+            return View(model);
         }
 
         // GET: WorkOrders/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -71,6 +93,7 @@ namespace ReslifeWorkorderManagement.Controllers
 
         // GET: WorkOrders/Edit/5
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -126,6 +149,7 @@ namespace ReslifeWorkorderManagement.Controllers
 
         // GET: WorkOrders/Delete/5
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,6 +171,7 @@ namespace ReslifeWorkorderManagement.Controllers
 
         // POST: WorkOrders/Delete/5
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);
@@ -160,11 +185,12 @@ namespace ReslifeWorkorderManagement.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> updateProgress(int id, string newProgress)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);
 
-            if(workOrder == null)
+            if (workOrder == null)
             {
                 return Json(new { success = false, message = "WorkOrder not found" });
             }
@@ -183,6 +209,23 @@ namespace ReslifeWorkorderManagement.Controllers
             {
                 return Json(new { success = false, message = "Something went wrong while updaitng progress. Try again." });
             }
+        }
+
+        [HttpPost]
+        [Route("WorkOrders/UpdateAssignee/{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateAssignee(int id, [FromForm] string newAssigneeId)
+        {
+            var workOrder = await _context.WorkOrder.FindAsync(id);
+
+            if (workOrder == null)
+            {
+                return Json(new { success = false, message = "WorkOrder not found" });
+            }
+            workOrder.WorkOrderAssigneeId = newAssigneeId;
+            _context.Update(workOrder);
+            await _context.SaveChangesAsync();
+            return Json(new { success = true, workOrderId = id, message = "New Assignee is selected." });
         }
 
         private bool WorkOrderExists(int id)

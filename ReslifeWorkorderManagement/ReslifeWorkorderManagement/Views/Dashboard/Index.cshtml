@@ -5,121 +5,123 @@
     Layout = "_Staff-Layout";
 }
 
-<div class="d-flex justify-content-between align-items-center heading-line">
-    <h1>Dashboard</h1>
-</div>
-<div class="dashboard-layout">
-    <div class="left-section">
-        <div class="insights">
-            <div class="requested">
-                <span><i class="bi bi-clipboard-data-fill"></i></span>
-                <div class="middle">
-                    <div class="left">
-                        <h6>Total Workorder</h6>
-                        <h4>Requested</h4>
+<div class="wrapper">
+    <div class="d-flex justify-content-between align-items-center heading-line">
+        <h1>Dashboard</h1>
+    </div>
+    <div class="dashboard-layout">
+        <div class="left-section">
+            <div class="insights">
+                <div class="requested">
+                    <span><i class="bi bi-clipboard-data-fill"></i></span>
+                    <div class="middle">
+                        <div class="left">
+                            <h6>Total Workorder</h6>
+                            <h4>Requested</h4>
+                        </div>
+                        <div class="right-workorder">
+                            <h1>@Model.requestedWorkOrders</h1>
+                        </div>
                     </div>
-                    <div class="right-workorder">
-                        <h1>@Model.requestedWorkOrders</h1>
+                </div>
+                <div class="in-progress">
+                    <span><i class="bi bi-caret-right-fill"></i></span>
+                    <div class="middle">
+                        <div class="left">
+                            <h6>Total Workorder</h6>
+                            <h4>In Progress</h4>
+                        </div>
+                        <div class="right-workorder">
+                            <h1>@Model.inProgressWorkOrders</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="completed">
+                    <span><i class="bi bi-check-lg"></i></span>
+                    <div class="middle">
+                        <div class="left">
+                            <h6>Total Workorder</h6>
+                            <h4>Complete</h4>
+                        </div>
+                        <div class="right-workorder">
+                            <h1>@Model.completeWorkOrders</h1>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="in-progress">
-                <span><i class="bi bi-caret-right-fill"></i></span>
-                <div class="middle">
-                    <div class="left">
-                        <h6>Total Workorder</h6>
-                        <h4>In Progress</h4>
-                    </div>
-                    <div class="right-workorder">
-                        <h1>@Model.inProgressWorkOrders</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="completed">
-                <span><i class="bi bi-check-lg"></i></span>
-                <div class="middle">
-                    <div class="left">
-                        <h6>Total Workorder</h6>
-                        <h4>Complete</h4>
-                    </div>
-                    <div class="right-workorder">
-                        <h1>@Model.completeWorkOrders</h1>
-                    </div>
-                </div>
-            </div>
+
+            <!---- Recent Workorders ----->
+            <div class="recent-workorders">
+            <h2> Recent Work Orders</h2>
+    
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Created At
+                        </th>
+                        <th>
+                            Request
+                        </th>
+                        <th>
+                            Building
+                        </th>
+                        <th>
+                            Progress
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.workOrders)
+                    {
+                        <tr>
+                            <td data-cell="name">
+                                @Html.DisplayFor(modelItem => item.RequesterFirstName)  @Html.DisplayFor(modelItem => item.RequesterLastName)
+                            </td>
+                            <td data-created="@item.CreatedAt">
+                                @Html.DisplayFor(modelItem => item.CreatedAt)
+                            </td>
+                            <td data-cell="request">
+                                @Html.DisplayFor(modelItem => item.Request)
+                            </td>
+                            <td data-cell="building">
+                                @Html.DisplayFor(modelItem => item.Building)
+                            </td>
+                            <td data-cell="progress">
+                                @Html.DisplayFor(modelItem => item.Progress)
+                            </td>              
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="mt-2"></div>
+            <a href="/WorkOrders/Index">View all work orders</a>
+        </div>
         </div>
 
-        <!---- Recent Workorders ----->
-        <div class="recent-workorders">
-        <h2> Recent Work Orders</h2>
-    
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Created At
-                    </th>
-                    <th>
-                        Request
-                    </th>
-                    <th>
-                        Building
-                    </th>
-                    <th>
-                        Progress
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.workOrders)
-                {
-                    <tr>
-                        <td data-cell="name">
-                            @Html.DisplayFor(modelItem => item.RequesterFirstName)  @Html.DisplayFor(modelItem => item.RequesterLastName)
-                        </td>
-                        <td data-created="@item.CreatedAt">
-                            @Html.DisplayFor(modelItem => item.CreatedAt)
-                        </td>
-                        <td data-cell="request">
-                            @Html.DisplayFor(modelItem => item.Request)
-                        </td>
-                        <td data-cell="building">
-                            @Html.DisplayFor(modelItem => item.Building)
-                        </td>
-                        <td data-cell="progress">
-                            @Html.DisplayFor(modelItem => item.Progress)
-                        </td>              
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="mt-2"></div>
-        <a href="/WorkOrders/Index">View all work orders</a>
-    </div>
-    </div>
+        <div class="right-section">
+            <div class="recent-updates">
+                <h2>Recent Updates</h2>
+                <div class="updates">
+                    <div class="update">
+                        <div class="profile-icon">
 
-    <div class="right-section">
-        <div class="recent-updates">
-            <h2>Recent Updates</h2>
-            <div class="updates">
-                <div class="update">
-                    <div class="profile-icon">
-
+                        </div>
+                        <div class="message">
+                            <p><b>Mike Tyson</b> received his order of Night lion tech GPS drone.</p>
+                            <small class="text-muted">2 Minutes Ago</small>
+                        </div>
                     </div>
-                    <div class="message">
-                        <p><b>Mike Tyson</b> received his order of Night lion tech GPS drone.</p>
-                        <small class="text-muted">2 Minutes Ago</small>
-                    </div>
-                </div>
-                <div class="update">
-                    <div class="profile-icon">
-                    </div>
-                    <div class="message">
-                        <p><b>Mike Tyson</b> received his order of Night lion tech GPS drone.</p>
-                        <small class="text-muted">2 Minutes Ago</small>
+                    <div class="update">
+                        <div class="profile-icon">
+                        </div>
+                        <div class="message">
+                            <p><b>Mike Tyson</b> received his order of Night lion tech GPS drone.</p>
+                            <small class="text-muted">2 Minutes Ago</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,6 +135,10 @@
         grid-template-columns: 3fr 1fr; /* Left section takes 75%, right section 25% */
         gap: 2rem; /* Space between columns */
         margin-top: 2rem;
+
+        @@media screen and (max-width: 768px){
+            grid-template-columns: 1fr;
+        }
     }
 
     .left-section {
@@ -144,6 +150,10 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1.6rem;
+
+        @@media screen and (max-width: 768px){
+            grid-template-columns: 1fr;
+        }
     }
 
     .insights > div {
