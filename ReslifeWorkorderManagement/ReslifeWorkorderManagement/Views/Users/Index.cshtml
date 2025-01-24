@@ -268,6 +268,7 @@
         color: black;
         border-radius: 10px;
         width: 100%;
+        box-shadow: var(--box-shadow);
     }
 
     th,
@@ -285,24 +286,45 @@
         position: sticky;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
+    }
 
     th {
-        border-radius: 10px;
         position: sticky;
         text-align: left;
     }
 
-    tr:nth-of-type(2n) {
-        background: hsl(0 50% 0% / 0.05);
-    }
-
-    tr:first-child th:first-child {
+    th:first-child {
         border-top-left-radius: 10px;
     }
 
-    tr:first-child th:last-child {
-        border-top-left-radius: 10px;
+    th:last-child {
+        border-top-right-radius: 10px;
     }
-
   
 </style>
+
+<script>
+    if ('@(User.IsInRole("DeskStaff"))' === 'True') {
+
+        const DeleteButtons = document.querySelectorAll(".delete-icon-btn");
+        DeleteButtons.forEach((DeleteButton) => {
+            DeleteButton.style.visibility = 'hidden';
+        });
+
+        const AddButtons = document.querySelectorAll(".add-staff-tr");
+        AddButtons.forEach((AddButton) => {
+            AddButton.remove();
+        });
+
+        const EditButtons = document.querySelectorAll(".edit-icon-btn");
+        EditButtons.forEach((EditButton) => {
+            EditButton.style.visibility = 'hidden';
+        });
+
+        const tableHeads = document.querySelectorAll("th");
+        tableHeads.forEach((head) => {
+            head.style.backgroundColor = "var(--yellow-primary)";
+            console.log(head);
+        })
+    };
+</script>
