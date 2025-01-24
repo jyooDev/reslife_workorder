@@ -189,7 +189,7 @@ namespace ReslifeWorkorderManagement.Controllers
 
         [HttpPost]
         [Authorize]
-        [Authorize("Administrator,StudentSupervisor,MaintenanceStaff")]
+        [Authorize(Roles ="Administrator,StudentSupervisor,MaintenanceStaff")]
         public async Task<IActionResult> updateProgress(int id, string newProgress)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);
@@ -218,7 +218,7 @@ namespace ReslifeWorkorderManagement.Controllers
         [HttpPost]
         [Route("WorkOrders/UpdateAssignee/{id}")]
         [Authorize]
-        [Authorize("Administrator,StudentSupervisor,MaintenanceStaff")]
+        [Authorize(Roles = "Administrator,StudentSupervisor,MaintenanceStaff")]
         public async Task<IActionResult> UpdateAssignee(int id, [FromForm] string newAssigneeId)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);

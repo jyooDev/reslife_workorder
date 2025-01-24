@@ -176,11 +176,11 @@
 
                 </td>
                 <td data-cell="action">
-                    <button data-toggle="modal" data-url="@Url.Action("Edit", "WorkOrders", new { id = item.Id })" class="edit-icon-btn">
-                        <i class="bi bi-pencil edit-icon"></i>
-                    </button>
                     <button data-toggle="modal" data-url="@Url.Action("Details", "WorkOrders", new { id = item.Id })" class="details-icon-btn">
                             <i class="bi bi-journal-text details-icon"></i>
+                    </button>
+                    <button data-toggle="modal" data-url="@Url.Action("Edit", "WorkOrders", new { id = item.Id })" class="edit-icon-btn">
+                        <i class="bi bi-pencil edit-icon"></i>
                     </button>
                     <button data-toggle="modal" data-url="@Url.Action("Delete", "WorkOrders", new { id = item.Id })" class="delete-icon-btn">
                         <i class="bi bi-trash details-icon"></i>
@@ -409,3 +409,32 @@
         border-radius: 5%;
     }
 </style>
+
+
+<script>
+
+    if ('@(User.IsInRole("DeskStaff"))' === 'True'){
+        console.log("Hello");
+        const ProgressDropdowns = document.querySelectorAll(".progress-dropdown");
+        ProgressDropdowns.forEach((dropdown) => {
+            dropdown.disabled = true;
+            dropdown.title = "You are not authorized to update progress.";
+        });
+
+        const AssigneeDropdowns = document.querySelectorAll(".assignee-box");
+        AssigneeDropdowns.forEach((dropdown) => {
+            dropdown.disabled = true;
+            dropdown.title = "You are not authorized to update assignee.";
+        });
+
+        const DeleteButtons = document.querySelectorAll(".delete-icon-btn");
+        DeleteButtons.forEach((DeleteButton) => {
+            DeleteButton.style.visibility = 'hidden';
+        });
+
+        const EditButtons = document.querySelectorAll(".edit-icon-btn");
+        EditButtons.forEach((EditButton) => {
+            EditButton.style.visibility = 'hidden';
+        });
+    };
+</script>
