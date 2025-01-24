@@ -93,7 +93,7 @@ namespace ReslifeWorkorderManagement.Controllers
 
         // GET: WorkOrders/Edit/5
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Administrator,StudentSupervisor,MaintenanceStaff")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -120,6 +120,7 @@ namespace ReslifeWorkorderManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Administrator,StudentSupervisor,MaintenanceStaff")]
         public async Task<IActionResult> Edit(int id, WorkOrderVM model)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);
@@ -150,6 +151,7 @@ namespace ReslifeWorkorderManagement.Controllers
         // GET: WorkOrders/Delete/5
         [HttpGet]
         [Authorize]
+        [Authorize(Roles = "Administrator,StudentSupervisor,MaintenanceStaff")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -172,6 +174,7 @@ namespace ReslifeWorkorderManagement.Controllers
         // POST: WorkOrders/Delete/5
         [HttpPost]
         [Authorize]
+        [Authorize(Roles = "Administrator,StudentSupervisor,MaintenanceStaff")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);
@@ -186,6 +189,7 @@ namespace ReslifeWorkorderManagement.Controllers
 
         [HttpPost]
         [Authorize]
+        [Authorize("Administrator,StudentSupervisor,MaintenanceStaff")]
         public async Task<IActionResult> updateProgress(int id, string newProgress)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);
@@ -214,6 +218,7 @@ namespace ReslifeWorkorderManagement.Controllers
         [HttpPost]
         [Route("WorkOrders/UpdateAssignee/{id}")]
         [Authorize]
+        [Authorize("Administrator,StudentSupervisor,MaintenanceStaff")]
         public async Task<IActionResult> UpdateAssignee(int id, [FromForm] string newAssigneeId)
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);

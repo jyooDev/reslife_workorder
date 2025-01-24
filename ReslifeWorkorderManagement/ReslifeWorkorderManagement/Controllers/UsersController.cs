@@ -319,7 +319,7 @@ namespace ReslifeWorkorderManagement.Controllers
         [HttpGet]
         public IActionResult AccessDenied()
         {
-            return RedirectToAction("Index", "Dashboard");
+            return RedirectToAction("Index", "Home");
         }
 
 
