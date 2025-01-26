@@ -12,7 +12,7 @@ namespace ReslifeWorkorderManagement.Data
 
         }
         public DbSet<WorkOrder> WorkOrder { get; set; }
-
+        public DbSet<History> History { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

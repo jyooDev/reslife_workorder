@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReslifeWorkorderManagement.Data;
 
@@ -11,9 +12,11 @@ using ReslifeWorkorderManagement.Data;
 namespace ReslifeWorkorderManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250126080536_history")]
+    partial class history
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,7 +256,7 @@ namespace ReslifeWorkorderManagement.Migrations
 
                     b.HasIndex("ActionUserId");
 
-                    b.ToTable("History", (string)null);
+                    b.ToTable("History");
                 });
 
             modelBuilder.Entity("ReslifeWorkorderManagement.Models.WorkOrder", b =>
@@ -314,7 +317,7 @@ namespace ReslifeWorkorderManagement.Migrations
 
                     b.HasIndex("WorkOrderAssigneeId");
 
-                    b.ToTable("WorkOrder", (string)null);
+                    b.ToTable("WorkOrder");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
