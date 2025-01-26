@@ -9,10 +9,24 @@ namespace ReslifeWorkorderManagement.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public required HistoryType Type { get; set; }
         //foreign key
-        public required string ActionUserId { get; set; }
+        public string ActionUserId { get; set; }
+
+        public int WorkorderId { get; set; }
 
         //navigation
+        public WorkOrder WorkOrder { get; set; }
         public  ApplicationUser ActionUser { get; set; }
+
+    }
+
+    public enum HistoryType
+    {
+        CREATE,
+        EDIT,
+        DELETE,
+        ASSIGN,
+        UPDATEPROGRESS
     }
 }
