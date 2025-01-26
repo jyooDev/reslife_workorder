@@ -85,6 +85,13 @@ namespace ReslifeWorkorderManagement.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(workOrder);
+                var history = new History()
+                {
+                    Type = HistoryType.CREATE,
+                    Message = "New workorder #" + workOrder.Id + " is submitted." ,
+                    WorkOrder = workOrder
+                };
+                _context.Update(history);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Workorder is submitted successfully." });
             }
@@ -125,11 +132,21 @@ namespace ReslifeWorkorderManagement.Controllers
         {
             var workOrder = await _context.WorkOrder.FindAsync(id);
             workOrder.Note = model.Note;
+
+            var user = await _userManager.GetUserAsync(User);
+            var history = new History()
+            {
+                Type = HistoryType.EDIT,
+                Message = "has edited note of workordder #" + id + ".",
+                ActionUserId = user.Id,
+                WorkOrder = workOrder,
+            };
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(workOrder);
+                    _context.Update(history);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -180,6 +197,14 @@ namespace ReslifeWorkorderManagement.Controllers
             var workOrder = await _context.WorkOrder.FindAsync(id);
             if (workOrder != null)
             {
+                var user = await _userManager.GetUserAsync(User);
+                var history = new History()
+                {
+                    Type = HistoryType.DELETE,
+                    Message = "has deleted workorder #" + workOrder.Id + ".",
+                    ActionUserId = user.Id,
+                };
+                _context.Update(history);
                 _context.WorkOrder.Remove(workOrder);
             }
 
@@ -204,6 +229,27 @@ namespace ReslifeWorkorderManagement.Controllers
                 {
                     workOrder.Progress = (Progress)statusValue;
                 }
+                var user = await _userManager.GetUserAsync(User);
+                var history = new History()
+                {
+                    Type = HistoryType.UPDATEPROGRESS,
+                    Message = "has updated the progress of workorder #" + workOrder.Id + " to ",
+                    ActionUserId = user.Id,
+                    WorkOrder = workOrder
+                };
+                switch (workOrder.Progress)
+                {
+                    case Progress.Requested:
+                        history.Message += "REQUESTED";
+                        break;
+                    case Progress.InProgress:
+                        history.Message += "IN PROGRESS";
+                        break;
+                    case Progress.Completed:
+                        history.Message += "COMPLETED";
+                        break;
+                }
+                _context.Update(history);
                 _context.Update(workOrder);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, workOrderId = id, progress = newProgress });
@@ -227,8 +273,17 @@ namespace ReslifeWorkorderManagement.Controllers
             {
                 return Json(new { success = false, message = "WorkOrder not found" });
             }
-            workOrder.WorkOrderAssigneeId = newAssigneeId;
+            var assignee = await _context.Users.FindAsync(newAssigneeId);
+            workOrder.WorkOrderAssignee = assignee;
             _context.Update(workOrder);
+            var user = await _userManager.GetUserAsync(User);
+            var history = new History()
+            {
+                Type = HistoryType.ASSIGN,
+                Message = "has assigned workorder #" + workOrder.Id + " to " + assignee.FirstName + assignee.LastName,
+                ActionUserId = user.Id
+            };
+            _context.Update(history);
             await _context.SaveChangesAsync();
             return Json(new { success = true, workOrderId = id, message = "New Assignee is selected." });
         }

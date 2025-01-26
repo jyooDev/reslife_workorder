@@ -1,6 +1,8 @@
 ﻿document.addEventListener("DOMContentLoaded", (event) => {
     styleAllProgressDropdown();
     sortByProgressAndCreatedTime();
+    timeSince();
+    setProfileIcon();
 });
 
 function styleAllProgressDropdown() {
@@ -208,3 +210,63 @@ function sortByProgressAndCreatedTime() {
     const fullContainer = document.querySelector(".full-width-container");
     cardContainers.forEach((cardContainer) => fullContainer.appendChild(cardContainer));
 }
+
+function timeSince() {
+    const updates = Array.from(document.querySelectorAll(".recent-update-time"));
+    updates.forEach((update) => {
+        const now = Date.now();
+        const createdTime = new Date(update.dataset['created']).getTime();
+        var seconds = Math.floor((now - createdTime) / 1000); //milliseconds to seconds
+        var interval = seconds / 31536000 //check if more than an year
+        if (interval > 1) {
+            var year = Math.floor(interval);
+            update.textContent = year + ' years ago';
+        }
+        var interval = seconds / 86400 //check if more than a day
+        if (interval > 1) {
+            var day = Math.floor(interval);
+            update.textContent = day + ' days ago';
+        }
+        var interval = seconds / 3600 //check if more than an hour
+        if (interval > 1) {
+            var hour = Math.floor(interval);
+            update.textContent = hour + 'hours ago';
+        }
+        else {
+            var interval = seconds / 60;
+            var minute = Math.floor(interval);
+            update.textContent = minute + ' mins ago';
+        }
+        //console.log(interval);
+    })
+
+    setTimeout(timeSince, 5000);
+}
+
+function setProfileIcon() {
+    const profiles = Array.from(document.querySelectorAll(".profile-icon"));
+    profiles.forEach((profile) => {
+        const historyType = profile.dataset['historyType'];
+        profile.innerHTML = '<img src="/images/logo.png" />';
+        if (historyType === 'UPDATEPROGRESS') {
+            const Message = profile.dataset['message'];
+            if (Message.includes('REQUEST')) {
+                profile.innerHTML = '<img src="/images/new-request-profile.png" />';
+            } else if (Message.includes('IN PROGRESS')) {
+                profile.innerHTML = '<img src="/images/in-progress-profile.png" />';
+            } else {
+                profile.innerHTML = '<img src="/images/complete-profile.png" />';
+            }
+        } else if (historyType === 'DELETE') {
+            profile.innerHTML = '<img src="/images/delete-profile.png" />';
+
+        } else if (historyType === 'ASSIGN') {
+            profile.innerHTML = '<img src="/images/assign-profile.png" />';
+
+        } else if (historyType === 'EDIT') {
+            profile.innerHTML = '<img src="/images/edit-profile.png" />';
+
+        }
+    })
+}
+
