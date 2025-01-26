@@ -50,13 +50,14 @@ function updateProgress(selectElement) {
         newProgress: newProgress
     };
 
-/*    console.log('URL: ', url);
-    console.log("Progress", newProgress);*/
+    console.log('URL: ', url);
+    console.log("Progress", newProgress);
 
     $.post(url, sendData).done(function (response) {
         console.log('Response Success: ', response.success);/**/
         if (response.success) {
             styleProgressDropdown(response.workOrderId, response.progress);
+            sortByProgressAndCreatedTime();
             location.reload()
         }
         else {
@@ -65,9 +66,8 @@ function updateProgress(selectElement) {
             }
         }
     }).fail(function () {
-        alert("Failed to update status.")
+        alert("You are not authorized for this action.");
     });
-    sortByProgressAndCreatedTime();
 }
 function updateAssignee(selectElement) {
     const newAssignee = selectElement.value;

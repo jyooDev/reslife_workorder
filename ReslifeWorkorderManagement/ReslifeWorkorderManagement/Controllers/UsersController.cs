@@ -123,7 +123,7 @@ namespace ReslifeWorkorderManagement.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
+        [Authorize(Roles="Administrator")]
         [HttpGet]
         public async Task<IActionResult> Create(string role)
         {
@@ -138,7 +138,7 @@ namespace ReslifeWorkorderManagement.Controllers
             return PartialView("_CreateUserPartial", model);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Create(UserCreateVM newUser)
         {
@@ -193,7 +193,7 @@ namespace ReslifeWorkorderManagement.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
@@ -211,7 +211,7 @@ namespace ReslifeWorkorderManagement.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
@@ -230,7 +230,7 @@ namespace ReslifeWorkorderManagement.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -258,7 +258,7 @@ namespace ReslifeWorkorderManagement.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Edit(UserEditVM model)
         {
@@ -314,6 +314,12 @@ namespace ReslifeWorkorderManagement.Controllers
             }
 
             return RedirectToAction("Index", "Users");
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return RedirectToAction("Index", "Home");
         }
 
 
