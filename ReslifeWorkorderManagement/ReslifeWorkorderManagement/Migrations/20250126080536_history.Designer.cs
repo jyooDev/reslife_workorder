@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReslifeWorkorderManagement.Data;
 
@@ -11,9 +12,11 @@ using ReslifeWorkorderManagement.Data;
 namespace ReslifeWorkorderManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250126080536_history")]
+    partial class history
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,17 +252,9 @@ namespace ReslifeWorkorderManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkorderId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ActionUserId");
-
-                    b.HasIndex("WorkorderId");
 
                     b.ToTable("History");
                 });
@@ -384,15 +379,7 @@ namespace ReslifeWorkorderManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ReslifeWorkorderManagement.Models.WorkOrder", "WorkOrder")
-                        .WithMany()
-                        .HasForeignKey("WorkorderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ActionUser");
-
-                    b.Navigation("WorkOrder");
                 });
 
             modelBuilder.Entity("ReslifeWorkorderManagement.Models.WorkOrder", b =>

@@ -10,5 +10,7 @@
         public required int completeWorkOrders { get; set; }
 
         public required IEnumerable<WorkOrder> workOrders { get; set; }
+
+        public IEnumerable<History>? recentUpdates { get; set; }
     }
 }
