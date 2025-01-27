@@ -73,6 +73,13 @@ namespace ReslifeWorkorderManagement.Controllers
             return View(model);
         }
 
+        [Authorize]
+        public async Task<IActionResult> Activity()
+        {
+            var actiivties = await _context.History.Include(h => h.WorkOrder).Include(h => h.ActionUser).ToListAsync();
+            return View(actiivties);
+        }
+
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
